@@ -23,8 +23,9 @@ func _physics_process(_delta: float) -> void:
 	move_and_slide()
 
 func _process(_delta: float) -> void:
+	var notebook = get_tree().get_first_node_in_group("notebook_ui")
+	
 	if Input.is_action_just_pressed("ui_focus_next"):
-		var notebook = get_tree().get_first_node_in_group("notebook_ui")
 		if notebook != null:
 			if notebook.visible:
 				notebook.close()
@@ -32,7 +33,6 @@ func _process(_delta: float) -> void:
 				notebook.open()
 			return
 
-	var notebook = get_tree().get_first_node_in_group("notebook_ui")
 	if notebook != null and notebook.visible:
 		return
 
