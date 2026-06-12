@@ -29,6 +29,11 @@ jobs:
         run: |
           mkdir -p build/web
 
+      - name: Setup Export Templates
+        run: |
+          mkdir -p ~/.local/share/godot/export_templates/
+          cp -r /root/.local/share/godot/export_templates/* ~/.local/share/godot/export_templates/ || true
+
       - name: Debug and Export Game
         run: |
           echo "=== Godot Version ===" > export_log.txt
