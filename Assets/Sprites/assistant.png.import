@@ -2,12 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://b4v424na8vgtw"
-valid=false
+uid="uid://d0r6ijtfdbt1p"
+path="res://.godot/imported/assistant.png-5cafb7ec6d005440fc56fe631b247374.ctex"
+metadata={
+"vram_texture": false
+}
 
 [deps]
 
 source_file="res://Assets/Sprites/assistant.png"
+dest_files=["res://.godot/imported/assistant.png-5cafb7ec6d005440fc56fe631b247374.ctex"]
 
 [params]
 

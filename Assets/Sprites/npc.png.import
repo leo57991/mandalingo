@@ -2,12 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://yv63l5wordu2"
-valid=false
+uid="uid://dmopduq3hsgty"
+path="res://.godot/imported/npc.png-dec85bbcc0ab6024d26b900d7ba726ec.ctex"
+metadata={
+"vram_texture": false
+}
 
 [deps]
 
 source_file="res://Assets/Sprites/npc.png"
+dest_files=["res://.godot/imported/npc.png-dec85bbcc0ab6024d26b900d7ba726ec.ctex"]
 
 [params]
 

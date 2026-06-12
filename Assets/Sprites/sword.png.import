@@ -2,12 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bqisq2cou2mx3"
-valid=false
+uid="uid://bgc2q5d8dr7jh"
+path="res://.godot/imported/sword.png-592de964f347a2f78f681639f77bd886.ctex"
+metadata={
+"vram_texture": false
+}
 
 [deps]
 
 source_file="res://Assets/Sprites/sword.png"
+dest_files=["res://.godot/imported/sword.png-592de964f347a2f78f681639f77bd886.ctex"]
 
 [params]
 

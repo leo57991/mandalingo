@@ -2,12 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dvvsdnreb403h"
-valid=false
+uid="uid://cb14kt3x348ot"
+path="res://.godot/imported/flower.png-32584bf1b1f04e0091fb351e8fa33d32.ctex"
+metadata={
+"vram_texture": false
+}
 
 [deps]
 
 source_file="res://Assets/Sprites/flower.png"
+dest_files=["res://.godot/imported/flower.png-32584bf1b1f04e0091fb351e8fa33d32.ctex"]
 
 [params]
 

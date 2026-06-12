@@ -2,12 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cc22qvroy7yo3"
-valid=false
+uid="uid://cimsywldyv40u"
+path="res://.godot/imported/counter.png-cb53ad572b84990144fb1c8b0defa7a0.ctex"
+metadata={
+"vram_texture": false
+}
 
 [deps]
 
 source_file="res://Assets/Sprites/counter.png"
+dest_files=["res://.godot/imported/counter.png-cb53ad572b84990144fb1c8b0defa7a0.ctex"]
 
 [params]
 

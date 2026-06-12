@@ -2,12 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://17ksaur11jl3"
-valid=false
+uid="uid://bm3g7vwh27vtw"
+path="res://.godot/imported/shelf_b.png-249a9c97354ecf619e7d610727f127f6.ctex"
+metadata={
+"vram_texture": false
+}
 
 [deps]
 
 source_file="res://Assets/Sprites/shelf_b.png"
+dest_files=["res://.godot/imported/shelf_b.png-249a9c97354ecf619e7d610727f127f6.ctex"]
 
 [params]
 

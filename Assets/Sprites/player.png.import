@@ -2,12 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dyf328p8od36j"
-valid=false
+uid="uid://bvrmlvbj8pfp7"
+path="res://.godot/imported/player.png-7c09656d9ce490aabfa1a9222d99cb2e.ctex"
+metadata={
+"vram_texture": false
+}
 
 [deps]
 
 source_file="res://Assets/Sprites/player.png"
+dest_files=["res://.godot/imported/player.png-7c09656d9ce490aabfa1a9222d99cb2e.ctex"]
 
 [params]
 

@@ -2,12 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cqssu6658h3mh"
-valid=false
+uid="uid://dhgh1gxfd1oqr"
+path="res://.godot/imported/floor.png-9c001d406625e266022c103ca21c5cbe.ctex"
+metadata={
+"vram_texture": false
+}
 
 [deps]
 
 source_file="res://Assets/Sprites/floor.png"
+dest_files=["res://.godot/imported/floor.png-9c001d406625e266022c103ca21c5cbe.ctex"]
 
 [params]
 

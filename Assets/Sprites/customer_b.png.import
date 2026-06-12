@@ -2,12 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://3ubjetkshqr5"
-valid=false
+uid="uid://u7ta1si7ean"
+path="res://.godot/imported/customer_b.png-7b83bafc8fb7a7719a1487fdf1205d6e.ctex"
+metadata={
+"vram_texture": false
+}
 
 [deps]
 
 source_file="res://Assets/Sprites/customer_b.png"
+dest_files=["res://.godot/imported/customer_b.png-7b83bafc8fb7a7719a1487fdf1205d6e.ctex"]
 
 [params]
 

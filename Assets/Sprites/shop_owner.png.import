@@ -2,12 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bnvmqi2s6ukft"
-valid=false
+uid="uid://100pa7xopgk5"
+path="res://.godot/imported/shop_owner.png-f9df42039e8a3fbaa6be130d7bde3dca.ctex"
+metadata={
+"vram_texture": false
+}
 
 [deps]
 
 source_file="res://Assets/Sprites/shop_owner.png"
+dest_files=["res://.godot/imported/shop_owner.png-f9df42039e8a3fbaa6be130d7bde3dca.ctex"]
 
 [params]
 
