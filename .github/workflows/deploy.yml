@@ -39,14 +39,13 @@ jobs:
           echo "=== Exporting ===" >> export_log.txt
           godot --headless --export-release "Web" build/web/index.html >> export_log.txt 2>&1
 
-      - name: Push Logs on Failure
-        if: failure()
+      - name: Write Logs to Summary
+        if: always()
         run: |
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git add export_log.txt
-          git commit -m "chore: upload build export log [skip ci]" || true
-          git push origin main
+          echo "### Build and Export Logs" >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+          cat export_log.txt >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
 
       - name: Add coi-service-worker for SharedArrayBuffer
         run: |
