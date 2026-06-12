@@ -4,7 +4,7 @@ func _ready() -> void:
 	# Load and setup floor visual
 	var floor_sprite = get_node_or_null("Floor")
 	if floor_sprite is Sprite2D:
-		var tex = load("res://Assets/Sprites/floor.png")
+		var tex = preload("res://Assets/Sprites/floor.png")
 		if tex is Texture2D:
 			floor_sprite.texture = tex
 			var tex_size = tex.get_size()
@@ -14,7 +14,7 @@ func _ready() -> void:
 	# Load and setup counter visual
 	var counter_sprite = get_node_or_null("Counter/CounterVisual")
 	if counter_sprite is Sprite2D:
-		var tex = load("res://Assets/Sprites/counter.png")
+		var tex = preload("res://Assets/Sprites/counter.png")
 		if tex is Texture2D:
 			counter_sprite.texture = tex
 			var tex_size = tex.get_size()
@@ -33,18 +33,18 @@ func _ready() -> void:
 func _configure_shelves() -> void:
 	var shelf_apples = get_node_or_null("Shelves/ShelfApples")
 	if shelf_apples != null:
-		shelf_apples.shelf_texture = load("res://Assets/Sprites/shelf_a.png")
-		shelf_apples.item_texture = load("res://Assets/Sprites/apple.png")
+		shelf_apples.shelf_texture = preload("res://Assets/Sprites/shelf_a.png")
+		shelf_apples.item_texture = preload("res://Assets/Sprites/apple.png")
 		
 	var shelf_tea = get_node_or_null("Shelves/ShelfTea")
 	if shelf_tea != null:
-		shelf_tea.shelf_texture = load("res://Assets/Sprites/shelf_b.png")
-		shelf_tea.item_texture = load("res://Assets/Sprites/tea.png")
+		shelf_tea.shelf_texture = preload("res://Assets/Sprites/shelf_b.png")
+		shelf_tea.item_texture = preload("res://Assets/Sprites/tea.png")
 		
 	var shelf_water = get_node_or_null("Shelves/ShelfWater")
 	if shelf_water != null:
-		shelf_water.shelf_texture = load("res://Assets/Sprites/shelf_c.png")
-		shelf_water.item_texture = load("res://Assets/Sprites/water.png")
+		shelf_water.shelf_texture = preload("res://Assets/Sprites/shelf_c.png")
+		shelf_water.item_texture = preload("res://Assets/Sprites/water.png")
 
 	for shelf in get_tree().get_nodes_in_group("vocabulary_shelf"):
 		if shelf.has_method("refresh_context"):
@@ -54,23 +54,23 @@ func _configure_npcs() -> void:
 	# Assign textures
 	var shop_owner = get_node_or_null("NPCs/ShopOwner")
 	if shop_owner != null:
-		shop_owner.sprite_texture = load("res://Assets/Sprites/shop_owner.png")
+		shop_owner.sprite_texture = preload("res://Assets/Sprites/shop_owner.png")
 		
 	var assistant = get_node_or_null("NPCs/Assistant")
 	if assistant != null:
-		assistant.sprite_texture = load("res://Assets/Sprites/assistant.png")
+		assistant.sprite_texture = preload("res://Assets/Sprites/assistant.png")
 		
 	var customer_a = get_node_or_null("NPCs/CustomerA")
 	if customer_a != null:
-		customer_a.sprite_texture = load("res://Assets/Sprites/customer_a.png")
+		customer_a.sprite_texture = preload("res://Assets/Sprites/customer_a.png")
 		
 	var customer_b = get_node_or_null("NPCs/CustomerB")
 	if customer_b != null:
-		customer_b.sprite_texture = load("res://Assets/Sprites/customer_b.png")
+		customer_b.sprite_texture = preload("res://Assets/Sprites/customer_b.png")
 		
 	var customer_c = get_node_or_null("NPCs/CustomerC")
 	if customer_c != null:
-		customer_c.sprite_texture = load("res://Assets/Sprites/customer_c.png")
+		customer_c.sprite_texture = preload("res://Assets/Sprites/customer_c.png")
 
 	_configure_npc(
 		shop_owner,

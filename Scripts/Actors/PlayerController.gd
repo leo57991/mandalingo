@@ -9,7 +9,7 @@ func _ready() -> void:
 	add_to_group("player")
 	var sprite_2d = get_node_or_null("Sprite2D")
 	if sprite_2d != null:
-		var tex = load("res://Assets/Sprites/player.png")
+		var tex = preload("res://Assets/Sprites/player.png")
 		if tex is Texture2D:
 			sprite_2d.texture = tex
 			var tex_size = tex.get_size()

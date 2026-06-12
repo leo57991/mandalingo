@@ -37,5 +37,5 @@ shape = SubResource("CircleShape2D_interact")
 [node name="Camera2D" type="Camera2D" parent="."]
 position_smoothing_enabled = true
 position_smoothing_speed = 8.0
-zoom = Vector2(1.5, 1.5)
+zoom = Vector2(3, 3)
 enabled = true
