@@ -29,6 +29,12 @@ jobs:
         run: |
           mkdir -p build/web
 
+      - name: Debug Godot Version & Templates
+        run: |
+          godot --version
+          ls -la ~/.local/share/godot/export_templates/ || true
+          ls -la ~/.local/share/godot/templates/ || true
+
       - name: Export Game
         run: |
           godot --headless --export-release "Web" build/web/index.html
