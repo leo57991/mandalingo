@@ -15,7 +15,10 @@ enum BehaviorState {
 @export var walk_speed: float = 50.0
 @export var spoken_words: Array = ["你好"]
 @export var spoken_vocab_ids: Array = [&"nihao"]
-@export var sprite_texture: Texture2D
+@export var sprite_texture: Texture2D:
+	set(val):
+		sprite_texture = val
+		_update_sprite()
 @export var min_idle_time: float = 1.2
 @export var max_idle_time: float = 3.2
 
@@ -38,13 +41,17 @@ func _ready() -> void:
 	_hide_speech()
 	speech_timer.timeout.connect(_hide_speech)
 	_pick_next_idle_time()
-	
-	if sprite_texture != null and sprite_2d != null:
-		sprite_2d.texture = sprite_texture
+	_update_sprite()
+
+func _update_sprite() -> void:
+	# Use get_node_or_null to prevent null errors during early init
+	var s2d = get_node_or_null("Sprite2D")
+	if s2d != null and sprite_texture != null:
+		s2d.texture = sprite_texture
 		var tex_size = sprite_texture.get_size()
 		if tex_size.y > 0:
 			var scale_factor = 48.0 / tex_size.y
-			sprite_2d.scale = Vector2(scale_factor, scale_factor)
+			s2d.scale = Vector2(scale_factor, scale_factor)
 
 func _physics_process(_delta: float) -> void:
 	match behavior_state:
