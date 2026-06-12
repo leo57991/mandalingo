@@ -9,7 +9,7 @@ concurrency:
   cancel-in-progress: true
 
 permissions:
-  contents: read
+  contents: write
   pages: write
   id-token: write
 
@@ -29,15 +29,24 @@ jobs:
         run: |
           mkdir -p build/web
 
-      - name: Debug Godot Version & Templates
+      - name: Debug and Export Game
         run: |
-          godot --version
-          ls -la ~/.local/share/godot/export_templates/ || true
-          ls -la ~/.local/share/godot/templates/ || true
+          echo "=== Godot Version ===" > export_log.txt
+          godot --version >> export_log.txt 2>&1 || true
+          echo "=== Export Templates ===" >> export_log.txt
+          ls -la ~/.local/share/godot/export_templates/ >> export_log.txt 2>&1 || true
+          ls -la ~/.local/share/godot/templates/ >> export_log.txt 2>&1 || true
+          echo "=== Exporting ===" >> export_log.txt
+          godot --headless --export-release "Web" build/web/index.html >> export_log.txt 2>&1
 
-      - name: Export Game
+      - name: Push Logs on Failure
+        if: failure()
         run: |
-          godot --headless --export-release "Web" build/web/index.html
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add export_log.txt
+          git commit -m "chore: upload build export log [skip ci]" || true
+          git push origin main
 
       - name: Add coi-service-worker for SharedArrayBuffer
         run: |
