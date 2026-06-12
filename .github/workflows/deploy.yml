@@ -1,0 +1,36 @@
+name: "Deploy to GitHub Pages"
+on:
+  push:
+    branches: [ main ]
+
+permissions:
+  contents: write
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    container:
+      image: barichello/godot-ci:4.3
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Build Directories
+        run: |
+          mkdir -p build/web
+
+      - name: Export Game
+        run: |
+          godot --headless --export-release "Web" build/web/index.html
+
+      - name: Add coi-service-worker for SharedArrayBuffer
+        run: |
+          git clone https://github.com/gzuidhof/coi-serviceworker.git
+          mv coi-serviceworker/coi-serviceworker.js build/web/coi-serviceworker.js
+          sed -i 's/<head>/<head><script src="coi-serviceworker.js"><\/script>/g' build/web/index.html
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./build/web
