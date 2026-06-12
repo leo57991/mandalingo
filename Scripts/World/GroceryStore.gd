@@ -38,12 +38,12 @@ func _configure_shelves() -> void:
 		
 	var shelf_tea = get_node_or_null("Shelves/ShelfTea")
 	if shelf_tea != null:
-		shelf_tea.shelf_texture = preload("res://Assets/Sprites/shelf_b.png")
+		shelf_tea.shelf_texture = preload("res://Assets/Sprites/shelf_a.png")
 		shelf_tea.item_texture = preload("res://Assets/Sprites/tea.png")
 		
 	var shelf_water = get_node_or_null("Shelves/ShelfWater")
 	if shelf_water != null:
-		shelf_water.shelf_texture = preload("res://Assets/Sprites/shelf_c.png")
+		shelf_water.shelf_texture = preload("res://Assets/Sprites/shelf_a.png")
 		shelf_water.item_texture = preload("res://Assets/Sprites/water.png")
 
 	for shelf in get_tree().get_nodes_in_group("vocabulary_shelf"):

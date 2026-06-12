@@ -11,7 +11,7 @@ enum BehaviorState {
 @export var identity: String = "人"
 @export var behavior_state: BehaviorState = BehaviorState.IDLE
 @export var can_random_walk: bool = true
-@export var random_walk_bounds: Rect2 = Rect2(Vector2(-300, -170), Vector2(520, 330))
+@export var random_walk_bounds: Rect2 = Rect2(Vector2(-300, -170), Vector2(380, 330))
 @export var walk_speed: float = 50.0
 @export var spoken_words: Array = ["你好"]
 @export var spoken_vocab_ids: Array = [&"nihao"]
