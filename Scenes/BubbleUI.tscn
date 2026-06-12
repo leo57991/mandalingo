@@ -1,0 +1,32 @@
+[gd_scene format=3 uid="uid://c4vgnx6b8j84"]
+
+[ext_resource type="Script" uid="uid://chno81yx8c7rv" path="res://Scripts/BubbleUI.gd" id="1_81t0j"]
+[ext_resource type="FontFile" uid="uid://bs0idto2q6los" path="res://Assets/Arial Unicode.ttf" id="2_esiwf"]
+
+[node name="BubbleUI" type="Control" unique_id=1576212564]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = -240.0
+offset_bottom = -114.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(5, 5)
+script = ExtResource("1_81t0j")
+
+[node name="Label" type="Label" parent="." unique_id=1981280176]
+layout_mode = 0
+offset_right = 58.399998
+offset_bottom = 49.0
+theme_override_fonts/font = ExtResource("2_esiwf")
+text = "hello
+"
+
+[node name="TextureRect" type="TextureRect" parent="." unique_id=1266605707]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Timer" type="Timer" parent="." unique_id=2143637340]
+one_shot = true

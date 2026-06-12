@@ -1,0 +1,138 @@
+[gd_scene load_steps=8 format=3]
+
+[ext_resource type="Script" path="res://Scripts/World/GroceryStore.gd" id="1"]
+[ext_resource type="PackedScene" path="res://Scenes/Actors/Player.tscn" id="2"]
+[ext_resource type="PackedScene" path="res://Scenes/Actors/NPC.tscn" id="3"]
+[ext_resource type="PackedScene" path="res://Scenes/Objects/Shelf.tscn" id="4"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_wall_h"]
+size = Vector2(720, 24)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_wall_v"]
+size = Vector2(24, 480)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_counter"]
+size = Vector2(120, 250)
+
+[node name="GroceryStore" type="Node2D"]
+script = ExtResource("1")
+
+[node name="Floor" type="Polygon2D" parent="."]
+color = Color(0.2, 0.22, 0.2, 1)
+polygon = PackedVector2Array(-360, -240, 360, -240, 360, 240, -360, 240)
+
+[node name="EntranceMarker" type="Polygon2D" parent="."]
+position = Vector2(0, 230)
+color = Color(0.12, 0.5, 0.24, 1)
+polygon = PackedVector2Array(-56, -10, 56, -10, 56, 10, -56, 10)
+
+[node name="Walls" type="Node2D" parent="."]
+
+[node name="TopWall" type="StaticBody2D" parent="Walls"]
+position = Vector2(0, -252)
+collision_layer = 4
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Walls/TopWall"]
+shape = SubResource("RectangleShape2D_wall_h")
+
+[node name="LeftWall" type="StaticBody2D" parent="Walls"]
+position = Vector2(-372, 0)
+collision_layer = 4
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Walls/LeftWall"]
+shape = SubResource("RectangleShape2D_wall_v")
+
+[node name="RightWall" type="StaticBody2D" parent="Walls"]
+position = Vector2(372, 0)
+collision_layer = 4
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Walls/RightWall"]
+shape = SubResource("RectangleShape2D_wall_v")
+
+[node name="BottomWallLeft" type="StaticBody2D" parent="Walls"]
+position = Vector2(-220, 252)
+collision_layer = 4
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Walls/BottomWallLeft"]
+shape = SubResource("RectangleShape2D_wall_h")
+
+[node name="BottomWallRight" type="StaticBody2D" parent="Walls"]
+position = Vector2(220, 252)
+collision_layer = 4
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Walls/BottomWallRight"]
+shape = SubResource("RectangleShape2D_wall_h")
+
+[node name="Counter" type="StaticBody2D" parent="."]
+position = Vector2(260, -30)
+collision_layer = 4
+
+[node name="CounterVisual" type="Polygon2D" parent="Counter"]
+color = Color(0.32, 0.22, 0.16, 1)
+polygon = PackedVector2Array(-60, -125, 60, -125, 60, 125, -60, 125)
+
+[node name="CounterCollision" type="CollisionShape2D" parent="Counter"]
+shape = SubResource("RectangleShape2D_counter")
+
+[node name="Shelves" type="Node2D" parent="."]
+
+[node name="ShelfApples" parent="Shelves" instance=ExtResource("4")]
+position = Vector2(-150, -80)
+shelf_id = &"shelf_apples"
+object_vocab_id = &"pingguo"
+
+[node name="ShelfTea" parent="Shelves" instance=ExtResource("4")]
+position = Vector2(-150, 10)
+shelf_id = &"shelf_tea"
+object_vocab_id = &"cha"
+
+[node name="ShelfWater" parent="Shelves" instance=ExtResource("4")]
+position = Vector2(-150, 100)
+shelf_id = &"shelf_water"
+object_vocab_id = &"shui"
+
+[node name="NPCs" type="Node2D" parent="."]
+
+[node name="ShopOwner" parent="NPCs" instance=ExtResource("3")]
+position = Vector2(250, -175)
+character_name = "林阿姨"
+identity = "店長"
+can_random_walk = false
+spoken_words = ["你好", "蘋果", "茶", "水"]
+spoken_vocab_ids = Array[StringName]([&"nihao", &"pingguo", &"cha", &"shui"])
+
+[node name="Assistant" parent="NPCs" instance=ExtResource("3")]
+position = Vector2(-20, 15)
+character_name = "小安"
+identity = "店員"
+behavior_state = 1
+can_random_walk = true
+spoken_words = ["蘋果", "茶", "水", "蘋果"]
+spoken_vocab_ids = Array[StringName]([&"pingguo", &"cha", &"shui", &"pingguo"])
+
+[node name="CustomerA" parent="NPCs" instance=ExtResource("3")]
+position = Vector2(-260, -75)
+character_name = "美美"
+identity = "客人"
+can_random_walk = true
+spoken_words = ["蘋果", "蘋果"]
+spoken_vocab_ids = Array[StringName]([&"pingguo", &"pingguo"])
+
+[node name="CustomerB" parent="NPCs" instance=ExtResource("3")]
+position = Vector2(-255, 95)
+character_name = "阿明"
+identity = "客人"
+can_random_walk = true
+spoken_words = ["茶", "你好", "茶"]
+spoken_vocab_ids = Array[StringName]([&"cha", &"nihao", &"cha"])
+
+[node name="CustomerC" parent="NPCs" instance=ExtResource("3")]
+position = Vector2(95, 135)
+character_name = "小雨"
+identity = "客人"
+can_random_walk = true
+spoken_words = ["水", "你", "水"]
+spoken_vocab_ids = Array[StringName]([&"shui", &"ni", &"shui"])
+
+[node name="Player" parent="." instance=ExtResource("2")]
+position = Vector2(0, 190)

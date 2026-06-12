@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="VocabularyEntry" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://Scripts/Systems/VocabularyEntry.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = &"ni"
+chinese = "你"
+pinyin = "ni3"
+english_internal = "you"
+audio_file = "res://Audio/Voice/ni.ogg"
+learned = false

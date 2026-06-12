@@ -16,7 +16,7 @@ func _ready() -> void:
 	if bubble_ui:
 		bubble_ui.hide()
 
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	if is_interactable and player_in_range:
 		# 支援按下 E 鍵互動，或是可以另外加入滑鼠點擊偵測
 		if Input.is_action_just_pressed("interact"):

@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="VocabularyEntry" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://Scripts/Systems/VocabularyEntry.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = &"nimen"
+chinese = "你們"
+pinyin = "ni3 men5"
+english_internal = "you plural"
+audio_file = "res://Audio/Voice/nimen.ogg"
+learned = false

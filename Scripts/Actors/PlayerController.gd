@@ -1,0 +1,37 @@
+extends CharacterBody2D
+
+@export var speed: float = 160.0
+@export var interaction_radius: float = 40.0
+
+@onready var interaction_area: Area2D = %InteractionArea
+
+func _ready() -> void:
+	add_to_group("player")
+
+func _physics_process(_delta: float) -> void:
+	var direction := Input.get_vector("move_left", "move_right", "move_up", "move_down")
+	velocity = direction * speed
+	move_and_slide()
+
+func _process(_delta: float) -> void:
+	if Input.is_action_just_pressed("interact"):
+		if DialogueSystem.is_showing:
+			DialogueSystem.advance()
+			return
+
+		var target := _get_closest_interaction_target()
+		if target != null:
+			target.interact()
+
+func _get_closest_interaction_target() -> Area2D:
+	var closest: Area2D = null
+	var closest_distance := INF
+
+	for area in interaction_area.get_overlapping_areas():
+		if area.has_method("interact") and "can_interact" in area and area.can_interact:
+			var distance := global_position.distance_to(area.global_position)
+			if distance < closest_distance:
+				closest = area
+				closest_distance = distance
+
+	return closest
