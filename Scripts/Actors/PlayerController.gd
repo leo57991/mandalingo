@@ -7,6 +7,15 @@ extends CharacterBody2D
 
 func _ready() -> void:
 	add_to_group("player")
+	var sprite_2d = get_node_or_null("Sprite2D")
+	if sprite_2d != null:
+		var tex = load("res://Assets/Sprites/player.png")
+		if tex is Texture2D:
+			sprite_2d.texture = tex
+			var tex_size = tex.get_size()
+			if tex_size.y > 0:
+				var scale_factor = 48.0 / tex_size.y
+				sprite_2d.scale = Vector2(scale_factor, scale_factor)
 
 func _physics_process(_delta: float) -> void:
 	var direction := Input.get_vector("move_left", "move_right", "move_up", "move_down")
@@ -14,6 +23,19 @@ func _physics_process(_delta: float) -> void:
 	move_and_slide()
 
 func _process(_delta: float) -> void:
+	if Input.is_action_just_pressed("ui_focus_next"):
+		var notebook = get_tree().get_first_node_in_group("notebook_ui")
+		if notebook != null:
+			if notebook.visible:
+				notebook.close()
+			else:
+				notebook.open()
+			return
+
+	var notebook = get_tree().get_first_node_in_group("notebook_ui")
+	if notebook != null and notebook.visible:
+		return
+
 	if Input.is_action_just_pressed("interact"):
 		if DialogueSystem.is_showing:
 			DialogueSystem.advance()

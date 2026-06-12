@@ -1,42 +1,67 @@
-# 沈浸式華語學習 RPG - Phase 2 開發計畫 (視覺與內容升級)
+# 專案整理與 GitHub Pages 404 修復計畫
 
-既然我們已經成功驗證了最核心的「走動 + 互動 + 文字顯示」機制，代表基礎工程已經打好了！接下來，我們要讓這個遊戲真正看起來像是一個「修仙遊戲」，並且落實「看圖猜字」的學習機制。
+本計畫旨在解決以下問題：
+1. **GitHub Pages 404 錯誤**：修復 `https://leo57991.github.io/mandalingo/` 的存取問題。
+2. **專案資料夾整理**：將 root 目錄及 `Scenes/`、`Scripts/` 中已不再使用的 Phase 1 遺留/測試檔案移至 `Archive/` 資料夾，使專案結構清晰。
 
-## 目標
-1. **擺脫預設方塊**：將主角、NPC、背景換成符合「修仙」主題的 2D 美術圖。
-2. **實裝情境提示 (圖片學習法)**：當 NPC 說「蘋果」時，對話框旁邊要真實顯示出一顆蘋果的圖片，讓不懂中文的玩家可以建立「蘋果圖片 = 蘋果」的連結。
-3. **擴充詞彙量**：在雜貨店裡新增更多不同的物品/NPC，讓玩家可以學到 2~3 個不同的單字（例如：蘋果、劍、書）。
+---
 
-## ⚠️ User Review Required (請確認美術與內容方向)
+## ⚠️ User Review Required
 
-在我們開始生成美術圖與寫扣之前，請幫我確認以下方向：
-
-### ❓ Open Questions
 > [!IMPORTANT]
-> 1. **美術風格偏好**：你希望這款 2D 修仙遊戲的美術風格是偏向「像素風 (Pixel Art)」、「手繪插畫風 (Hand-drawn)」，還是「Q版可愛風 (Chibi)」？
-> 2. **擴充單字**：除了「蘋果 (Apple)」之外，在這個雜貨店的場景中，你希望玩家接下來能學到哪兩個單字？（例如：劍/Sword、藥水/Potion、書本/Book 等等）
+> 為了讓新的 GitHub Actions 部署方式生效，您需要在 GitHub 儲存庫的設定中進行一項微調：
+> 1. 前往您的 GitHub Repository 設定頁面：**Settings > Pages**
+> 2. 在 **Build and deployment** 下方的 **Source** 選擇框中，將 **"Deploy from a branch"** 改為 **"GitHub Actions"**。
+>
+> 這樣一來，GitHub 就能直接使用我們設定的 workflow 進行自動化部署，而不需要再透過獨立的 `gh-pages` 分支，能有效解決 404 錯誤，也讓部署流程更為簡潔。
 
-## Proposed Changes (實作細節)
+---
 
-### 1. AI 美術生成與替換
-我將會使用內建的 AI 繪圖工具，為你生成以下素材放入 `Assets/Sprites/` 資料夾：
-- **主角 (Player)**：一位修仙者。
-- **雜貨店老闆 (NPC)**。
-- **背景地板 (Store Background)**：木質地板或古風石磚。
-- **物品圖示 (Icons)**：蘋果、以及你指定的另外兩個物品。
+## Proposed Changes
 
-### 2. UI 更新 (BubbleUI.tscn)
-#### [MODIFY] Scripts/BubbleUI.gd
-- 更新邏輯，確保當接收到 `prompt_image` 參數時，`TextureRect` 能夠正確顯示物品圖片，並與文字（Label）完美排版在一起。
+### 1. GitHub Actions 部署修復與升級
 
-### 3. 場景擴充 (Main.tscn)
-#### [MODIFY] Main.tscn
-- 鋪設地板背景。
-- 將預設的 Godot 藍色大頭替換為生成的美術圖。
-- 複製多個 NPC 或可互動的物件（例如桌上的蘋果），並分別在右側屬性面板為它們設定不同的 `Active Text` 與 `Prompt Image`。
+我們會更新 `.github/workflows/deploy.yml` 檔，並進行以下調整：
+- 將 Godot CI 的映像檔版本由 `barichello/godot-ci:4.3` 升級為 **`barichello/godot-ci:4.6.3`**，以匹配您本機運行的 Godot 4.6.3 版本，防止因版本不一致導致的匯出失敗。
+- 將部署方式切換為官方推薦的 **GitHub Actions 部署 API**（使用 `actions/upload-pages-artifact` 和 `actions/deploy-pages`），這能避免污染分支並省去手動設定權杖的繁瑣步驟。
+
+#### [MODIFY] [.github/workflows/deploy.yml](file:///Users/leo57/Documents/Codex/2026-06-11/mandalingo-godot/mandarin-learning-game/.github/workflows/deploy.yml)
+- 升級 `image` 為 `barichello/godot-ci:4.6.3`。
+- 修改 `permissions`，新增 `pages: write` 與 `id-token: write`。
+- 使用官方部署 Actions 代替 `peaceiris/actions-gh-pages`。
+
+---
+
+### 2. 專案資料夾整理 (封存遺留檔案)
+
+我們將建立一個 `Archive/` 目錄，將不再使用的舊版場景與腳本移入其中，維持開發目錄的乾淨。
+
+#### [NEW] [Archive/](file:///Users/leo57/Documents/Codex/2026-06-11/mandalingo-godot/mandarin-learning-game/Archive/)
+- 建立此目錄，並在其下建立對應的 `Scenes/` 與 `Scripts/` 子資料夾來分類保存舊檔案。
+
+#### [MODIFY] 移置以下檔案至封存區：
+- **專案根目錄 (Root)**:
+  - `main.tscn` ➡️ `Archive/main.tscn`
+  - `npc.tscn` ➡️ `Archive/npc.tscn`
+  - `player.tscn` ➡️ `Archive/player.tscn`
+- **場景目錄 (Scenes/)**:
+  - `Scenes/BubbleUI.tscn` ➡️ `Archive/Scenes/BubbleUI.tscn`
+- **腳本目錄 (Scripts/)**:
+  - `Scripts/BubbleUI.gd` ➡️ `Archive/Scripts/BubbleUI.gd` (及其 `.uid` 檔)
+  - `Scripts/NPC.gd` ➡️ `Archive/Scripts/NPC.gd` (及其 `.uid` 檔)
+  - `Scripts/Player.gd` ➡️ `Archive/Scripts/Player.gd` (及其 `.uid` 檔)
+
+---
 
 ## Verification Plan
-1. 確認生成的美術風格符合預期。
-2. 開啟遊戲，玩家現在是在一個古風木地板上行走。
-3. 靠近蘋果按下 E，對話框會同時出現「蘋果文字」與「蘋果圖片」。
-4. 靠近劍按下 E，對話框會同時出現「劍文字」與「劍圖片」。
+
+### Automated Tests
+- 本地匯出測試：執行 Godot 4.6.3 headless 匯出指令，確認能順利生成 Web 版本，無遺失依賴報錯。
+  ```bash
+  "/Users/leo57/Library/Application Support/Steam/steamapps/common/Godot Engine/Godot.app/Contents/MacOS/Godot" --headless --export-release "Web" test_build/index.html
+  ```
+
+### Manual Verification
+- 將所有整理後的變更與 workflow 更新 Commit 並 Push 到 GitHub 上。
+- 請使用者配合將 GitHub Pages 設定的 Source 切換為 **"GitHub Actions"**。
+- 確認 GitHub Actions 流程執行成功，且 `https://leo57991.github.io/mandalingo/` 可以正常進入且不再顯示 404。

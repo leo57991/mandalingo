@@ -20,8 +20,11 @@ script = ExtResource("1")
 shape = SubResource("RectangleShape2D_body")
 
 [node name="PlaceholderBody" type="Polygon2D" parent="."]
+visible = false
 color = Color(0.2, 0.45, 0.95, 1)
 polygon = PackedVector2Array(-12, -14, 12, -14, 12, 14, -12, 14)
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
 
 [node name="InteractionArea" type="Area2D" parent="."]
 unique_name_in_owner = true

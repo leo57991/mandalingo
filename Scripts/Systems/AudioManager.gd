@@ -10,6 +10,8 @@ func _ready() -> void:
 	add_child(voice_player)
 
 func play_vocabulary(id: StringName) -> void:
+	VocabularyDatabase.mark_learned(id)
+	
 	var path := VocabularyDatabase.get_audio_path(id)
 	if path.is_empty():
 		# TODO: Add recorded Chinese voice lines for vocabulary ids.

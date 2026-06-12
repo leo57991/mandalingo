@@ -1,0 +1,44 @@
+extends CanvasLayer
+class_name NotebookUI
+
+@onready var word_list: VBoxContainer = %WordList
+@onready var close_button: Button = %CloseButton
+
+var word_item_scene := preload("res://Scenes/UI/NotebookWordItem.tscn")
+
+func _ready() -> void:
+	add_to_group("notebook_ui")
+	process_mode = PROCESS_MODE_ALWAYS
+	visible = false
+	close_button.pressed.connect(close)
+
+func open() -> void:
+	if visible:
+		return
+	AudioManager.play_audio_file("res://Assets/SFX/notebook_flip.wav")
+	visible = true
+	get_tree().paused = true
+	_populate_words()
+
+func close() -> void:
+	if not visible:
+		return
+	AudioManager.play_audio_file("res://Assets/SFX/notebook_flip.wav")
+	visible = false
+	get_tree().paused = false
+
+func _populate_words() -> void:
+	# Clear existing
+	for child in word_list.get_children():
+		child.queue_free()
+	
+	# Get all vocabulary resources
+	var entries = VocabularyDatabase.entries.values()
+	
+	# Sort them by id
+	entries.sort_custom(func(a, b): return a.id < b.id)
+	
+	for entry in entries:
+		var item = word_item_scene.instantiate()
+		word_list.add_child(item)
+		item.setup(entry)
