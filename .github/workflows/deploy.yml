@@ -25,31 +25,54 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Install Missing Dependencies
+        run: |
+          apt-get update && apt-get install -y libfontconfig1
+
       - name: Setup Build Directories
         run: |
           mkdir -p build/web
 
       - name: Setup Export Templates
         run: |
+          GODOT_VERSION=$(godot --version 2>/dev/null | head -1 | sed 's/\.[a-z].*//') || true
+          echo "Detected Godot version prefix: $GODOT_VERSION"
           mkdir -p ~/.local/share/godot/export_templates/
-          cp -r /root/.local/share/godot/export_templates/* ~/.local/share/godot/export_templates/ || true
+          # Copy from the container's pre-installed location
+          if [ -d "/root/.local/share/godot/export_templates/" ]; then
+            cp -r /root/.local/share/godot/export_templates/* ~/.local/share/godot/export_templates/ || true
+          fi
+          echo "=== Export Templates Available ==="
+          find ~/.local/share/godot/export_templates/ -maxdepth 2 -type f | head -20 || true
 
-      - name: Debug and Export Game
+      - name: Import Project Assets
+        run: |
+          echo "=== Importing project (generates .godot/imported/) ==="
+          godot --headless --import 2>&1 || true
+          echo "=== Import complete ==="
+
+      - name: Export Game
         run: |
           echo "=== Godot Version ===" > export_log.txt
           godot --version >> export_log.txt 2>&1 || true
-          echo "=== Export Templates ===" >> export_log.txt
-          ls -la ~/.local/share/godot/export_templates/ >> export_log.txt 2>&1 || true
-          ls -la ~/.local/share/godot/templates/ >> export_log.txt 2>&1 || true
           echo "=== Exporting ===" >> export_log.txt
           godot --headless --export-release "Web" build/web/index.html >> export_log.txt 2>&1
+          EXPORT_EXIT=$?
+          echo "=== Export exit code: $EXPORT_EXIT ===" >> export_log.txt
+          # Verify output exists
+          if [ ! -f "build/web/index.html" ]; then
+            echo "ERROR: index.html was not generated!" >> export_log.txt
+            cat export_log.txt
+            exit 1
+          fi
+          echo "=== Export successful, index.html exists ==="
 
       - name: Write Logs to Summary
         if: always()
         run: |
           echo "### Build and Export Logs" >> $GITHUB_STEP_SUMMARY
           echo '```' >> $GITHUB_STEP_SUMMARY
-          cat export_log.txt >> $GITHUB_STEP_SUMMARY
+          cat export_log.txt >> $GITHUB_STEP_SUMMARY 2>/dev/null || echo "(no log file)" >> $GITHUB_STEP_SUMMARY
           echo '```' >> $GITHUB_STEP_SUMMARY
 
       - name: Add coi-service-worker for SharedArrayBuffer
