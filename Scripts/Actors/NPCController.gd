@@ -13,6 +13,7 @@ enum BehaviorState {
 @export var can_random_walk: bool = true
 @export var random_walk_bounds: Rect2 = Rect2(Vector2(-300, -170), Vector2(380, 330))
 @export var walk_speed: float = 50.0
+@export var speech_delay: float = 1.4
 @export var spoken_words: Array = ["你好"]
 @export var spoken_vocab_ids: Array = [&"nihao"]
 @export var sprite_texture: Texture2D:
@@ -75,24 +76,27 @@ func say(lines: Array, vocab_ids: Array = []) -> void:
 		display_word(String(lines[i]), vocab_id)
 		if not String(vocab_id).is_empty():
 			AudioManager.play_vocabulary(vocab_id, character_name)
-		await get_tree().create_timer(1.4).timeout
+		await get_tree().create_timer(speech_delay).timeout
 	is_speaking = false
 	behavior_state = BehaviorState.IDLE
 	_pick_next_idle_time()
 
-func set_profile(npc_name: String, npc_identity: String, random_walk: bool, words: Array, vocab_ids: Array) -> void:
+func set_profile(npc_name: String, npc_identity: String, random_walk: bool, words: Array, vocab_ids: Array, delay: float = 1.4, bounds: Rect2 = Rect2()) -> void:
 	character_name = npc_name
 	identity = npc_identity
 	can_random_walk = random_walk
 	spoken_words = words
 	spoken_vocab_ids = vocab_ids
+	speech_delay = delay
+	if bounds.size.x > 0 and bounds.size.y > 0:
+		random_walk_bounds = bounds
 	if is_node_ready():
 		_refresh_labels()
 
 func display_word(word: String, vocab_id: StringName = &"") -> void:
 	speech_label.text = word
 	speech_bubble.show()
-	speech_timer.start(2.0)
+	speech_timer.start(max(1.5, speech_delay - 0.5))
 	VocabularyDatabase.discover_words_in_text(word, character_name, vocab_id)
 
 func _process_idle(delta: float) -> void:

@@ -11,10 +11,15 @@ func _ready() -> void:
 			if tex_size.x > 0 and tex_size.y > 0:
 				floor_sprite.scale = Vector2(720.0 / tex_size.x, 480.0 / tex_size.y)
 				
-	# Show placeholder visuals for counter
-	var counter_placeholder = get_node_or_null("Counter/CounterVisual")
-	if counter_placeholder is Polygon2D:
-		counter_placeholder.visible = true
+	# Setup counter visual
+	var counter_sprite = get_node_or_null("Counter/CounterVisual")
+	if counter_sprite is Sprite2D:
+		var tex = preload("res://Assets/Sprites/counter.png")
+		if tex is Texture2D:
+			counter_sprite.texture = tex
+			var tex_size = tex.get_size()
+			if tex_size.x > 0 and tex_size.y > 0:
+				counter_sprite.scale = Vector2(120.0 / tex_size.x, 250.0 / tex_size.y)
 
 	_configure_shelves()
 	_configure_npcs()
@@ -35,45 +40,59 @@ func _configure_shelves() -> void:
 			shelf.refresh_context()
 
 func _configure_npcs() -> void:
+	# Set NPC starting positions
+	$NPCs/Assistant.position = Vector2(-240, -80)
+	$NPCs/CustomerB.position = Vector2(-240, 10)
+	$NPCs/CustomerC.position = Vector2(-240, 100)
+	$NPCs/CustomerA.position = Vector2(160, 190) # entrance (bottom right)
+
 	_configure_npc(
 		$NPCs/ShopOwner,
 		"林阿姨",
 		"店長",
 		false,
 		["你好", "蘋果", "茶", "水"],
-		[&"nihao", &"pingguo", &"cha", &"shui"]
+		[&"nihao", &"pingguo", &"cha", &"shui"],
+		1.4
 	)
 	_configure_npc(
 		$NPCs/Assistant,
 		"小安",
 		"店員",
 		true,
-		["蘋果", "茶", "水", "蘋果"],
-		[&"pingguo", &"cha", &"shui", &"pingguo"]
+		["你好", "蘋果"],
+		[&"nihao", &"pingguo"],
+		3.0,
+		Rect2(-250, -130, 200, 100)
 	)
 	_configure_npc(
 		$NPCs/CustomerA,
 		"美美",
 		"客人",
-		true,
-		["蘋果", "蘋果"],
-		[&"pingguo", &"pingguo"]
+		false, # Stationary next to entrance
+		["你好"],
+		[&"nihao"],
+		1.4
 	)
 	_configure_npc(
 		$NPCs/CustomerB,
 		"阿明",
 		"客人",
 		true,
-		["茶", "你好", "茶"],
-		[&"cha", &"nihao", &"cha"]
+		["你好", "茶"],
+		[&"nihao", &"cha"],
+		3.0,
+		Rect2(-250, -40, 200, 100)
 	)
 	_configure_npc(
 		$NPCs/CustomerC,
 		"小雨",
 		"客人",
 		true,
-		["水", "你", "水"],
-		[&"shui", &"ni", &"shui"]
+		["你好", "水"],
+		[&"nihao", &"shui"],
+		3.0,
+		Rect2(-250, 50, 200, 100)
 	)
 
 	_configure_interaction(
@@ -83,32 +102,32 @@ func _configure_npcs() -> void:
 	)
 	_configure_interaction(
 		$NPCs/Assistant/InteractionTarget,
-		["蘋果", "茶", "水", "蘋果"],
-		[&"pingguo", &"cha", &"shui", &"pingguo"]
+		["你好", "蘋果"],
+		[&"nihao", &"pingguo"]
 	)
 	_configure_interaction(
 		$NPCs/CustomerA/InteractionTarget,
-		["蘋果", "蘋果"],
-		[&"pingguo", &"pingguo"]
+		["你好"],
+		[&"nihao"]
 	)
 	_configure_interaction(
 		$NPCs/CustomerB/InteractionTarget,
-		["茶", "你好", "茶"],
-		[&"cha", &"nihao", &"cha"]
+		["你好", "茶"],
+		[&"nihao", &"cha"]
 	)
 	_configure_interaction(
 		$NPCs/CustomerC/InteractionTarget,
-		["水", "你", "水"],
-		[&"shui", &"ni", &"shui"]
+		["你好", "水"],
+		[&"nihao", &"shui"]
 	)
 
 func _configure_interaction(target: Area2D, lines: Array, vocab_ids: Array) -> void:
 	if target.has_method("set_dialogue"):
 		target.set_dialogue(lines, vocab_ids)
 
-func _configure_npc(npc: Node, npc_name: String, npc_identity: String, random_walk: bool, words: Array, vocab_ids: Array) -> void:
+func _configure_npc(npc: Node, npc_name: String, npc_identity: String, random_walk: bool, words: Array, vocab_ids: Array, delay: float = 1.4, bounds: Rect2 = Rect2()) -> void:
 	if npc.has_method("set_profile"):
-		npc.set_profile(npc_name, npc_identity, random_walk, words, vocab_ids)
+		npc.set_profile(npc_name, npc_identity, random_walk, words, vocab_ids, delay, bounds)
 
 func _create_notebook_button() -> void:
 	var hud = CanvasLayer.new()
