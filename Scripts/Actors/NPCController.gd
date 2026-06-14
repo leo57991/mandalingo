@@ -36,6 +36,7 @@ var is_speaking := false
 var random := RandomNumberGenerator.new()
 
 func _ready() -> void:
+	add_to_group("npc")
 	random.randomize()
 	target_position = global_position
 	_refresh_labels()
@@ -120,22 +121,9 @@ func _walk_to_random_target() -> void:
 		velocity = Vector2.ZERO
 		behavior_state = BehaviorState.IDLE
 		_pick_next_idle_time()
-		_maybe_say_idle_word()
 		return
 
 	velocity = offset.normalized() * walk_speed
-
-func _maybe_say_idle_word() -> void:
-	if spoken_words.is_empty():
-		return
-
-	var index := random.randi_range(0, spoken_words.size() - 1)
-	var vocab_id := StringName()
-	if index < spoken_vocab_ids.size():
-		vocab_id = StringName(spoken_vocab_ids[index])
-	display_word(spoken_words[index], vocab_id)
-	if not String(vocab_id).is_empty():
-		AudioManager.play_vocabulary(vocab_id, character_name)
 
 func _random_point_in_bounds() -> Vector2:
 	return Vector2(

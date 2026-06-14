@@ -15,6 +15,11 @@ func _ready() -> void:
 		placeholder.visible = true
 
 func _physics_process(_delta: float) -> void:
+	if _is_npc_dialogue_active():
+		velocity = Vector2.ZERO
+		move_and_slide()
+		return
+
 	var direction := Input.get_vector("move_left", "move_right", "move_up", "move_down")
 	velocity = direction * speed
 	move_and_slide()
@@ -61,3 +66,9 @@ func _get_closest_interaction_target() -> Area2D:
 				closest_distance = distance
 
 	return closest
+
+func _is_npc_dialogue_active() -> bool:
+	for npc in get_tree().get_nodes_in_group("npc"):
+		if "is_speaking" in npc and npc.is_speaking:
+			return true
+	return false
