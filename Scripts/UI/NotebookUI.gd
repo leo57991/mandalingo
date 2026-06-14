@@ -43,10 +43,16 @@ func _populate_words() -> void:
 	# Get all vocabulary resources
 	var entries = VocabularyDatabase.entries.values()
 	
-	# Sort them by id
-	entries.sort_custom(func(a, b): return a.id < b.id)
-	
+	# Filter for only seen entries (only seen words float/appear in the list)
+	var seen_entries = []
 	for entry in entries:
+		if entry.seen_count > 0:
+			seen_entries.append(entry)
+	
+	# Sort them by id
+	seen_entries.sort_custom(func(a, b): return a.id < b.id)
+	
+	for entry in seen_entries:
 		var item = word_item_scene.instantiate()
 		word_list.add_child(item)
 		item.setup(entry)

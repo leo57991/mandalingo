@@ -1,7 +1,6 @@
 extends PanelContainer
 
 @onready var chinese_label: Label = $HBox/ChineseCircle/ChineseLabel
-@onready var pinyin_label: Label = $HBox/InfoVBox/PinyinLabel
 @onready var stats_label: Label = $HBox/InfoVBox/StatsLabel
 @onready var guess_edit: LineEdit = $HBox/GuessEdit
 @onready var play_button: Button = $HBox/PlayButton
@@ -12,8 +11,6 @@ func setup(entry: VocabularyEntry) -> void:
 	vocab_entry = entry
 	if entry.seen_count > 0:
 		chinese_label.text = entry.chinese
-		pinyin_label.text = "(" + entry.pinyin + ")"
-		pinyin_label.visible = true
 		guess_edit.text = entry.user_guess
 		guess_edit.editable = true
 		guess_edit.placeholder_text = "輸入您的猜測..."
@@ -23,8 +20,6 @@ func setup(entry: VocabularyEntry) -> void:
 		play_button.visible = true
 	else:
 		chinese_label.text = "???"
-		pinyin_label.text = ""
-		pinyin_label.visible = false
 		guess_edit.text = ""
 		guess_edit.editable = false
 		guess_edit.placeholder_text = "未解鎖 / Locked"
