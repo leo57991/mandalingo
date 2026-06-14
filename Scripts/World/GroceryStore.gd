@@ -143,7 +143,7 @@ func _create_notebook_button() -> void:
 	var btn = Button.new()
 	btn.text = "" # No text, icon only
 	
-	var icon_tex = preload("res://Assets/Sprites/book_icon.png")
+	var icon_tex = load("res://Assets/Sprites/book_icon.png")
 	if icon_tex is Texture2D:
 		btn.icon = icon_tex
 		btn.expand_icon = true
