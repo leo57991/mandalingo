@@ -36,5 +36,5 @@ Workflow rule: every Godot project change made through Codex must be committed a
 
 - Add voice recordings for each vocabulary entry.
 - Replace placeholder polygons with final store art.
-- Configure and deploy the Google Drive playtest telemetry endpoint.
+- Run external playtests and review the consented telemetry in Google Drive.
 - Add more environmental actions for natural inference.

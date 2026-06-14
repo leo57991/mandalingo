@@ -40,8 +40,8 @@ theme/custom="res://Assets/ChineseImmersionTheme.tres"
 
 [telemetry]
 
-enabled=false
-endpoint_url=""
+enabled=true
+endpoint_url="https://script.google.com/macros/s/AKfycbxZKosTNYb22WNr1czhhEb_4am1RnzzGGsBDQj_Aw8sR9X7TAX28AjBKySM4snQJXON/exec"
 build_id="prototype-v0.1"
 consent_version=1
 
