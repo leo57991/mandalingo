@@ -22,6 +22,7 @@ config/icon="res://icon.svg"
 
 [autoload]
 
+TelemetryManager="*res://Scripts/Systems/TelemetryManager.gd"
 VocabularyDatabase="*res://Scripts/Systems/VocabularyDatabase.gd"
 AudioManager="*res://Scripts/Systems/AudioManager.gd"
 DialogueSystem="*res://Scripts/Systems/DialogueSystem.gd"
@@ -36,6 +37,13 @@ window/stretch/aspect="expand"
 [gui]
 
 theme/custom="res://Assets/ChineseImmersionTheme.tres"
+
+[telemetry]
+
+enabled=false
+endpoint_url=""
+build_id="prototype-v0.1"
+consent_version=1
 
 [input]
 

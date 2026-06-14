@@ -46,6 +46,7 @@ func mark_learned(id: StringName, location: String = "") -> void:
 		entry.seen_count += 1
 		if not location.is_empty():
 			entry.last_seen = location
+		TelemetryManager.track_vocabulary_seen(id, entry.seen_count, entry.last_seen)
 
 func discover_words_in_text(text: String, location: String = "", exclude_id: StringName = &"") -> void:
 	for id in entries:

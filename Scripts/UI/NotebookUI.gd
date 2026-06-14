@@ -27,6 +27,9 @@ func open() -> void:
 	visible = true
 	get_tree().paused = true
 	_populate_words()
+	TelemetryManager.record_event("notebook_opened", {
+		"visible_word_count": word_list.get_child_count(),
+	})
 
 func close() -> void:
 	if not visible:

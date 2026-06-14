@@ -30,6 +30,10 @@ func _ready() -> void:
 		var notebook_instance = notebook_scene.instantiate()
 		add_child(notebook_instance)
 
+	var consent_scene = load("res://Scenes/UI/TelemetryConsentUI.tscn")
+	if consent_scene != null:
+		add_child(consent_scene.instantiate())
+
 	# Create notebook open button (HUD)
 	_create_notebook_button()
 
