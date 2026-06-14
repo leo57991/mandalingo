@@ -5,9 +5,7 @@ Add recorded Mandarin voice clips here:
 - wo.ogg
 - ni.ogg
 - ta.ogg
-- women.ogg
-- nimen.ogg
-- tamen.ogg
+- zhe.ogg
 - ren.ogg
 - shi.ogg
 - shei.ogg

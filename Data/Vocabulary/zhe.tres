@@ -4,9 +4,9 @@
 
 [resource]
 script = ExtResource("1")
-id = &"nimen"
-chinese = "你們"
-pinyin = "ni3 men5"
-english_internal = "you plural"
-audio_file = "res://Audio/Voice/nimen.ogg"
+id = &"zhe"
+chinese = "這"
+pinyin = "zhe4"
+english_internal = "this"
+audio_file = "res://Audio/Voice/zhe.ogg"
 learned = false
