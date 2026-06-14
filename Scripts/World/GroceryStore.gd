@@ -89,8 +89,8 @@ func _configure_npcs() -> void:
 		"小雨",
 		"客人",
 		true,
-		["你好", "水"],
-		[&"nihao", &"shui"],
+		[],
+		[],
 		3.0,
 		Rect2(-330, 60, 90, 80)
 	)
