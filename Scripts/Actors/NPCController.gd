@@ -69,9 +69,12 @@ func say(lines: Array, vocab_ids: Array = []) -> void:
 	is_speaking = true
 	behavior_state = BehaviorState.SPEAKING
 	for i in lines.size():
-		display_word(String(lines[i]))
+		var vocab_id := StringName()
 		if i < vocab_ids.size():
-			AudioManager.play_vocabulary(StringName(vocab_ids[i]), character_name)
+			vocab_id = StringName(vocab_ids[i])
+		display_word(String(lines[i]), vocab_id)
+		if not String(vocab_id).is_empty():
+			AudioManager.play_vocabulary(vocab_id, character_name)
 		await get_tree().create_timer(1.4).timeout
 	is_speaking = false
 	behavior_state = BehaviorState.IDLE
@@ -86,10 +89,11 @@ func set_profile(npc_name: String, npc_identity: String, random_walk: bool, word
 	if is_node_ready():
 		_refresh_labels()
 
-func display_word(word: String) -> void:
+func display_word(word: String, vocab_id: StringName = &"") -> void:
 	speech_label.text = word
 	speech_bubble.show()
 	speech_timer.start(2.0)
+	VocabularyDatabase.discover_words_in_text(word, character_name, vocab_id)
 
 func _process_idle(delta: float) -> void:
 	velocity = Vector2.ZERO
@@ -122,9 +126,12 @@ func _maybe_say_idle_word() -> void:
 		return
 
 	var index := random.randi_range(0, spoken_words.size() - 1)
-	display_word(spoken_words[index])
+	var vocab_id := StringName()
 	if index < spoken_vocab_ids.size():
-		AudioManager.play_vocabulary(spoken_vocab_ids[index], character_name)
+		vocab_id = StringName(spoken_vocab_ids[index])
+	display_word(spoken_words[index], vocab_id)
+	if not String(vocab_id).is_empty():
+		AudioManager.play_vocabulary(vocab_id, character_name)
 
 func _random_point_in_bounds() -> Vector2:
 	return Vector2(

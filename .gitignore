@@ -17,3 +17,4 @@ mono_crash.*.json
 # OS-specific ignores
 .DS_Store
 Thumbs.db
+test_build/

@@ -42,6 +42,14 @@ func mark_learned(id: StringName, location: String = "") -> void:
 		if not location.is_empty():
 			entry.last_seen = location
 
+func discover_words_in_text(text: String, location: String = "", exclude_id: StringName = &"") -> void:
+	for id in entries:
+		if id == exclude_id:
+			continue
+		var entry = entries[id]
+		if entry != null and not entry.chinese.is_empty() and entry.chinese in text:
+			mark_learned(id, location)
+
 func get_audio_path(id: StringName) -> String:
 	var entry: Resource = get_entry(id)
 	if entry == null:

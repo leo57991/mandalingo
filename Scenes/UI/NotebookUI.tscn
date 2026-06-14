@@ -70,54 +70,6 @@ layout_mode = 2
 theme_override_font_sizes/font_size = 18
 text = "X"
 
-[node name="TableHeader" type="HBoxContainer" parent="Control/PanelContainer/MarginContainer/VBoxContainer"]
-layout_mode = 2
-theme_override_constants/separation = 12
-
-[node name="HWord" type="Label" parent="Control/PanelContainer/MarginContainer/VBoxContainer/TableHeader"]
-custom_minimum_size = Vector2(90, 0)
-layout_mode = 2
-theme_override_colors/font_color = Color(0.8, 0.8, 0.8, 1)
-theme_override_font_sizes/font_size = 14
-text = "中文"
-
-[node name="HPinyin" type="Label" parent="Control/PanelContainer/MarginContainer/VBoxContainer/TableHeader"]
-custom_minimum_size = Vector2(100, 0)
-layout_mode = 2
-theme_override_colors/font_color = Color(0.8, 0.8, 0.8, 1)
-theme_override_font_sizes/font_size = 14
-text = "拼音"
-
-[node name="HGuess" type="Label" parent="Control/PanelContainer/MarginContainer/VBoxContainer/TableHeader"]
-custom_minimum_size = Vector2(160, 0)
-layout_mode = 2
-theme_override_colors/font_color = Color(0.8, 0.8, 0.8, 1)
-theme_override_font_sizes/font_size = 14
-text = "英文猜測 (可修改)"
-
-[node name="HSeen" type="Label" parent="Control/PanelContainer/MarginContainer/VBoxContainer/TableHeader"]
-custom_minimum_size = Vector2(50, 0)
-layout_mode = 2
-theme_override_colors/font_color = Color(0.8, 0.8, 0.8, 1)
-theme_override_font_sizes/font_size = 14
-text = "看過"
-horizontal_alignment = 1
-
-[node name="HLocation" type="Label" parent="Control/PanelContainer/MarginContainer/VBoxContainer/TableHeader"]
-custom_minimum_size = Vector2(110, 0)
-layout_mode = 2
-theme_override_colors/font_color = Color(0.8, 0.8, 0.8, 1)
-theme_override_font_sizes/font_size = 14
-text = "最後出現位置"
-
-[node name="HPlay" type="Label" parent="Control/PanelContainer/MarginContainer/VBoxContainer/TableHeader"]
-custom_minimum_size = Vector2(36, 0)
-layout_mode = 2
-theme_override_colors/font_color = Color(0.8, 0.8, 0.8, 1)
-theme_override_font_sizes/font_size = 14
-text = "發音"
-horizontal_alignment = 1
-
 [node name="ScrollContainer" type="ScrollContainer" parent="Control/PanelContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
