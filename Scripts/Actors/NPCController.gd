@@ -71,7 +71,7 @@ func say(lines: Array, vocab_ids: Array = []) -> void:
 	for i in lines.size():
 		display_word(String(lines[i]))
 		if i < vocab_ids.size():
-			AudioManager.play_vocabulary(StringName(vocab_ids[i]))
+			AudioManager.play_vocabulary(StringName(vocab_ids[i]), character_name)
 		await get_tree().create_timer(1.4).timeout
 	is_speaking = false
 	behavior_state = BehaviorState.IDLE
@@ -124,7 +124,7 @@ func _maybe_say_idle_word() -> void:
 	var index := random.randi_range(0, spoken_words.size() - 1)
 	display_word(spoken_words[index])
 	if index < spoken_vocab_ids.size():
-		AudioManager.play_vocabulary(spoken_vocab_ids[index])
+		AudioManager.play_vocabulary(spoken_vocab_ids[index], character_name)
 
 func _random_point_in_bounds() -> Vector2:
 	return Vector2(

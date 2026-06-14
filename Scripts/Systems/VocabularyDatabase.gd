@@ -34,10 +34,13 @@ func get_chinese(id: StringName) -> String:
 		return ""
 	return entry.chinese
 
-func mark_learned(id: StringName) -> void:
+func mark_learned(id: StringName, location: String = "") -> void:
 	var entry: Resource = get_entry(id)
 	if entry != null:
 		entry.learned = true
+		entry.seen_count += 1
+		if not location.is_empty():
+			entry.last_seen = location
 
 func get_audio_path(id: StringName) -> String:
 	var entry: Resource = get_entry(id)

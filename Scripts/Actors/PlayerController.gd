@@ -5,6 +5,8 @@ extends CharacterBody2D
 
 @onready var interaction_area: Area2D = %InteractionArea
 
+var _was_j_pressed: bool = false
+
 func _ready() -> void:
 	add_to_group("player")
 	# Show placeholder body for demo (no art sprite)
@@ -20,7 +22,14 @@ func _physics_process(_delta: float) -> void:
 func _process(_delta: float) -> void:
 	var notebook = get_tree().get_first_node_in_group("notebook_ui")
 	
+	var toggle_notebook := false
 	if Input.is_action_just_pressed("ui_focus_next"):
+		toggle_notebook = true
+	elif Input.is_physical_key_pressed(KEY_J) and not _was_j_pressed:
+		toggle_notebook = true
+	_was_j_pressed = Input.is_physical_key_pressed(KEY_J)
+
+	if toggle_notebook:
 		if notebook != null:
 			if notebook.visible:
 				notebook.close()

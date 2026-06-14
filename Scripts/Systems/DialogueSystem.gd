@@ -7,6 +7,7 @@ var active_lines: Array = []
 var active_vocab_ids: Array = []
 var line_index := 0
 var is_showing := false
+var active_location: String = ""
 
 func _ready() -> void:
 	var popup_scene := preload("res://Scenes/UI/DialoguePopup.tscn")
@@ -14,12 +15,13 @@ func _ready() -> void:
 	add_child(popup)
 	popup.hide()
 
-func show_lines(lines: Array, vocab_ids: Array = []) -> void:
+func show_lines(lines: Array, vocab_ids: Array = [], location: String = "") -> void:
 	if lines.is_empty():
 		return
 
 	active_lines = lines
 	active_vocab_ids = vocab_ids
+	active_location = location
 	line_index = 0
 	is_showing = true
 	_show_current_line()
@@ -40,6 +42,7 @@ func hide_dialogue() -> void:
 	is_showing = false
 	active_lines.clear()
 	active_vocab_ids.clear()
+	active_location = ""
 	line_index = 0
 	if popup != null:
 		popup.hide()
@@ -54,4 +57,4 @@ func _show_current_line() -> void:
 		popup.show_chinese(text)
 
 	if not String(vocab_id).is_empty():
-		AudioManager.play_vocabulary(vocab_id)
+		AudioManager.play_vocabulary(vocab_id, active_location)

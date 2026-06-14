@@ -37,6 +37,15 @@ func refresh_context() -> void:
 	var word := VocabularyDatabase.get_chinese(object_vocab_id)
 	# Hide the hint label — no text visible until player interacts
 	object_hint.visible = false
-	interaction_target.display_name = String(shelf_id)
+	
+	var shelf_name := String(shelf_id)
+	if shelf_id == &"shelf_apples":
+		shelf_name = "蘋果貨架"
+	elif shelf_id == &"shelf_tea":
+		shelf_name = "茶葉貨架"
+	elif shelf_id == &"shelf_water":
+		shelf_name = "水貨架"
+		
+	interaction_target.display_name = shelf_name
 	if interaction_target.has_method("set_dialogue") and not word.is_empty():
 		interaction_target.set_dialogue([word, word], [object_vocab_id, object_vocab_id])

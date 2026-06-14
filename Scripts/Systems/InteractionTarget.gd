@@ -20,7 +20,7 @@ func interact() -> void:
 	if speaker != null and speaker.has_method("say"):
 		speaker.say(lines, vocab_ids)
 		return
-	DialogueSystem.show_lines(lines, vocab_ids)
+	DialogueSystem.show_lines(lines, vocab_ids, display_name)
 
 func set_dialogue(new_lines: Array, new_vocab_ids: Array = []) -> void:
 	lines = new_lines
