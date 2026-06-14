@@ -18,10 +18,15 @@ func load_entries() -> void:
 	dir.list_dir_begin()
 	var file_name := dir.get_next()
 	while not file_name.is_empty():
-		if not dir.current_is_dir() and file_name.ends_with(".tres"):
-			var resource := load("%s/%s" % [VOCABULARY_DIR, file_name])
-			if resource != null and "id" in resource:
-				entries[resource.id] = resource
+		if not dir.current_is_dir():
+			var is_tres = file_name.ends_with(".tres") or file_name.ends_with(".tres.remap")
+			if is_tres:
+				var clean_name = file_name
+				if clean_name.ends_with(".remap"):
+					clean_name = clean_name.trim_suffix(".remap")
+				var resource := load("%s/%s" % [VOCABULARY_DIR, clean_name])
+				if resource != null and "id" in resource:
+					entries[resource.id] = resource
 		file_name = dir.get_next()
 	dir.list_dir_end()
 

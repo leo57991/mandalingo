@@ -56,12 +56,9 @@ theme_override_constants/separation = 12
 [node name="Header" type="HBoxContainer" parent="Control/PanelContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2
 
-[node name="Title" type="Label" parent="Control/PanelContainer/MarginContainer/VBoxContainer/Header"]
+[node name="Spacer" type="Control" parent="Control/PanelContainer/MarginContainer/VBoxContainer/Header"]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_font_sizes/font_size = 28
-text = "華語學習筆記本 (Vocabulary Notebook)"
-vertical_alignment = 1
 
 [node name="CloseButton" type="Button" parent="Control/PanelContainer/MarginContainer/VBoxContainer/Header"]
 unique_name_in_owner = true
@@ -81,9 +78,3 @@ layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/separation = 8
 
-[node name="Footer" type="Label" parent="Control/PanelContainer/MarginContainer/VBoxContainer"]
-layout_mode = 2
-theme_override_colors/font_color = Color(0.65, 0.65, 0.65, 1)
-theme_override_font_sizes/font_size = 14
-text = "提示：按 Tab 鍵或點擊右上角 X 關閉筆記本"
-horizontal_alignment = 1

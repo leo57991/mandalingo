@@ -134,6 +134,12 @@ func _create_notebook_button() -> void:
 	hud.layer = 5
 	add_child(hud)
 	
+	var base_control = Control.new()
+	base_control.name = "HUDBase"
+	base_control.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	base_control.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	hud.add_child(base_control)
+	
 	var btn = Button.new()
 	btn.text = "" # No text, icon only
 	
@@ -185,7 +191,7 @@ func _create_notebook_button() -> void:
 	btn.add_theme_stylebox_override("focus", style_normal) # Keep same as normal on focus
 	
 	btn.pressed.connect(_on_notebook_button_pressed)
-	hud.add_child(btn)
+	base_control.add_child(btn)
 
 func _on_notebook_button_pressed() -> void:
 	var notebook = get_tree().get_first_node_in_group("notebook_ui")
