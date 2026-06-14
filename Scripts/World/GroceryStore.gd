@@ -116,17 +116,49 @@ func _create_notebook_button() -> void:
 	add_child(hud)
 	
 	var btn = Button.new()
-	btn.text = "📖 筆記本"
-	btn.custom_minimum_size = Vector2(120, 40)
+	btn.text = "📖"
+	btn.custom_minimum_size = Vector2(48, 48)
 	btn.anchor_left = 1.0
 	btn.anchor_right = 1.0
 	btn.anchor_top = 0.0
 	btn.anchor_bottom = 0.0
-	btn.offset_left = -140
+	btn.offset_left = -64
 	btn.offset_top = 16
 	btn.offset_right = -16
-	btn.offset_bottom = 56
+	btn.offset_bottom = 64
 	btn.process_mode = Node.PROCESS_MODE_ALWAYS
+	btn.add_theme_font_size_override("font_size", 22)
+	
+	# Create circular styling
+	var style_normal = StyleBoxFlat.new()
+	style_normal.bg_color = Color(0.15, 0.15, 0.15, 0.7)
+	style_normal.corner_radius_top_left = 24
+	style_normal.corner_radius_top_right = 24
+	style_normal.corner_radius_bottom_left = 24
+	style_normal.corner_radius_bottom_right = 24
+	style_normal.set_content_margin_all(0)
+	
+	var style_hover = StyleBoxFlat.new()
+	style_hover.bg_color = Color(0.25, 0.25, 0.25, 0.8)
+	style_hover.corner_radius_top_left = 24
+	style_hover.corner_radius_top_right = 24
+	style_hover.corner_radius_bottom_left = 24
+	style_hover.corner_radius_bottom_right = 24
+	style_hover.set_content_margin_all(0)
+	
+	var style_pressed = StyleBoxFlat.new()
+	style_pressed.bg_color = Color(0.1, 0.1, 0.1, 0.9)
+	style_pressed.corner_radius_top_left = 24
+	style_pressed.corner_radius_top_right = 24
+	style_pressed.corner_radius_bottom_left = 24
+	style_pressed.corner_radius_bottom_right = 24
+	style_pressed.set_content_margin_all(0)
+	
+	btn.add_theme_stylebox_override("normal", style_normal)
+	btn.add_theme_stylebox_override("hover", style_hover)
+	btn.add_theme_stylebox_override("pressed", style_pressed)
+	btn.add_theme_stylebox_override("focus", style_normal) # Keep same as normal on focus
+	
 	btn.pressed.connect(_on_notebook_button_pressed)
 	hud.add_child(btn)
 

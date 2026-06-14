@@ -15,7 +15,7 @@ func _ready() -> void:
 func open() -> void:
 	if visible:
 		return
-	AudioManager.play_audio_file("res://Assets/SFX/notebook_flip.wav")
+	AudioManager.play_audio_file("res://Assets/SFX/notebook_flip.ogg")
 	visible = true
 	get_tree().paused = true
 	_populate_words()
@@ -23,7 +23,7 @@ func open() -> void:
 func close() -> void:
 	if not visible:
 		return
-	AudioManager.play_audio_file("res://Assets/SFX/notebook_flip.wav")
+	AudioManager.play_audio_file("res://Assets/SFX/notebook_flip.ogg")
 	visible = false
 	get_tree().paused = false
 

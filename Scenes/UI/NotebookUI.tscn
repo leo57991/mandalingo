@@ -1,6 +1,8 @@
 [gd_scene load_steps=2 format=3]
 
 [ext_resource type="Script" path="res://Scripts/UI/NotebookUI.gd" id="1"]
+[ext_resource type="Theme" path="res://Assets/ChineseImmersionTheme.tres" id="2"]
+
 
 [node name="NotebookUI" type="CanvasLayer"]
 process_mode = 3
@@ -8,6 +10,7 @@ layer = 10
 script = ExtResource("1")
 
 [node name="Control" type="Control" parent="."]
+theme = ExtResource("2")
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -57,7 +60,7 @@ layout_mode = 2
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 28
-text = "📖 華語學習筆記本 (Vocabulary Notebook)"
+text = "華語學習筆記本 (Vocabulary Notebook)"
 vertical_alignment = 1
 
 [node name="CloseButton" type="Button" parent="Control/PanelContainer/MarginContainer/VBoxContainer/Header"]
