@@ -116,7 +116,14 @@ func _create_notebook_button() -> void:
 	add_child(hud)
 	
 	var btn = Button.new()
-	btn.text = "📖"
+	btn.text = "" # No text, icon only
+	
+	var icon_tex = load("res://Assets/Sprites/book_icon.png")
+	if icon_tex is Texture2D:
+		btn.icon = icon_tex
+		btn.expand_icon = true
+		btn.icon_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	
 	btn.custom_minimum_size = Vector2(48, 48)
 	btn.anchor_left = 1.0
 	btn.anchor_right = 1.0
@@ -127,7 +134,6 @@ func _create_notebook_button() -> void:
 	btn.offset_right = -16
 	btn.offset_bottom = 64
 	btn.process_mode = Node.PROCESS_MODE_ALWAYS
-	btn.add_theme_font_size_override("font_size", 22)
 	
 	# Create circular styling
 	var style_normal = StyleBoxFlat.new()
