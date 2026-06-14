@@ -4,6 +4,8 @@
 [ext_resource type="PackedScene" path="res://Scenes/Actors/Player.tscn" id="2"]
 [ext_resource type="PackedScene" path="res://Scenes/Actors/NPC.tscn" id="3"]
 [ext_resource type="PackedScene" path="res://Scenes/Objects/Shelf.tscn" id="4"]
+[ext_resource type="PackedScene" path="res://Scenes/UI/NotebookUI.tscn" id="5"]
+
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_wall_h"]
 size = Vector2(720, 24)
@@ -131,3 +133,6 @@ spoken_vocab_ids = Array[StringName]([&"shui", &"ni", &"shui"])
 
 [node name="Player" parent="." instance=ExtResource("2")]
 position = Vector2(0, 190)
+
+[node name="NotebookUI" parent="." instance=ExtResource("5")]
+
