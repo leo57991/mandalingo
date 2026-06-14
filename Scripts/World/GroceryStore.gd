@@ -41,9 +41,9 @@ func _configure_shelves() -> void:
 
 func _configure_npcs() -> void:
 	# Set NPC starting positions
-	$NPCs/Assistant.position = Vector2(-240, -80)
-	$NPCs/CustomerB.position = Vector2(-240, 10)
-	$NPCs/CustomerC.position = Vector2(-240, 100)
+	$NPCs/Assistant.position = Vector2(-280, -80)
+	$NPCs/CustomerB.position = Vector2(-280, 10)
+	$NPCs/CustomerC.position = Vector2(-280, 100)
 	$NPCs/CustomerA.position = Vector2(160, 190) # entrance (bottom right)
 
 	_configure_npc(
@@ -63,7 +63,7 @@ func _configure_npcs() -> void:
 		["你好", "蘋果"],
 		[&"nihao", &"pingguo"],
 		3.0,
-		Rect2(-250, -130, 200, 100)
+		Rect2(-330, -120, 90, 80)
 	)
 	_configure_npc(
 		$NPCs/CustomerA,
@@ -82,7 +82,7 @@ func _configure_npcs() -> void:
 		["你好", "茶"],
 		[&"nihao", &"cha"],
 		3.0,
-		Rect2(-250, -40, 200, 100)
+		Rect2(-330, -30, 90, 80)
 	)
 	_configure_npc(
 		$NPCs/CustomerC,
@@ -92,7 +92,7 @@ func _configure_npcs() -> void:
 		["你好", "水"],
 		[&"nihao", &"shui"],
 		3.0,
-		Rect2(-250, 50, 200, 100)
+		Rect2(-330, 60, 90, 80)
 	)
 
 	_configure_interaction(
