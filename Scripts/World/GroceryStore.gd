@@ -1,7 +1,7 @@
 extends Node2D
 
 func _ready() -> void:
-	# Load and setup floor visual
+	# Load and setup floor visual only (keep art for floor)
 	var floor_sprite = get_node_or_null("Floor")
 	if floor_sprite is Sprite2D:
 		var tex = preload("res://Assets/Sprites/floor.png")
@@ -11,15 +11,10 @@ func _ready() -> void:
 			if tex_size.x > 0 and tex_size.y > 0:
 				floor_sprite.scale = Vector2(720.0 / tex_size.x, 480.0 / tex_size.y)
 				
-	# Load and setup counter visual
-	var counter_sprite = get_node_or_null("Counter/CounterVisual")
-	if counter_sprite is Sprite2D:
-		var tex = preload("res://Assets/Sprites/counter.png")
-		if tex is Texture2D:
-			counter_sprite.texture = tex
-			var tex_size = tex.get_size()
-			if tex_size.x > 0 and tex_size.y > 0:
-				counter_sprite.scale = Vector2(120.0 / tex_size.x, 250.0 / tex_size.y)
+	# Show placeholder visuals for counter
+	var counter_placeholder = get_node_or_null("Counter/CounterVisual")
+	if counter_placeholder is Polygon2D:
+		counter_placeholder.visible = true
 
 	_configure_shelves()
 	_configure_npcs()
@@ -30,50 +25,18 @@ func _ready() -> void:
 		var notebook_instance = notebook_scene.instantiate()
 		add_child(notebook_instance)
 
-func _configure_shelves() -> void:
-	var shelf_apples = get_node_or_null("Shelves/ShelfApples")
-	if shelf_apples != null:
-		shelf_apples.shelf_texture = preload("res://Assets/Sprites/shelf_a.png")
-		shelf_apples.item_texture = preload("res://Assets/Sprites/apple.png")
-		
-	var shelf_tea = get_node_or_null("Shelves/ShelfTea")
-	if shelf_tea != null:
-		shelf_tea.shelf_texture = preload("res://Assets/Sprites/shelf_a.png")
-		shelf_tea.item_texture = preload("res://Assets/Sprites/tea.png")
-		
-	var shelf_water = get_node_or_null("Shelves/ShelfWater")
-	if shelf_water != null:
-		shelf_water.shelf_texture = preload("res://Assets/Sprites/shelf_a.png")
-		shelf_water.item_texture = preload("res://Assets/Sprites/water.png")
+	# Create notebook open button (HUD)
+	_create_notebook_button()
 
+func _configure_shelves() -> void:
+	# Show placeholder visuals for shelves (no art textures)
 	for shelf in get_tree().get_nodes_in_group("vocabulary_shelf"):
 		if shelf.has_method("refresh_context"):
 			shelf.refresh_context()
 
 func _configure_npcs() -> void:
-	# Assign textures
-	var shop_owner = get_node_or_null("NPCs/ShopOwner")
-	if shop_owner != null:
-		shop_owner.sprite_texture = preload("res://Assets/Sprites/shop_owner.png")
-		
-	var assistant = get_node_or_null("NPCs/Assistant")
-	if assistant != null:
-		assistant.sprite_texture = preload("res://Assets/Sprites/assistant.png")
-		
-	var customer_a = get_node_or_null("NPCs/CustomerA")
-	if customer_a != null:
-		customer_a.sprite_texture = preload("res://Assets/Sprites/customer_a.png")
-		
-	var customer_b = get_node_or_null("NPCs/CustomerB")
-	if customer_b != null:
-		customer_b.sprite_texture = preload("res://Assets/Sprites/customer_b.png")
-		
-	var customer_c = get_node_or_null("NPCs/CustomerC")
-	if customer_c != null:
-		customer_c.sprite_texture = preload("res://Assets/Sprites/customer_c.png")
-
 	_configure_npc(
-		shop_owner,
+		$NPCs/ShopOwner,
 		"林阿姨",
 		"店長",
 		false,
@@ -146,3 +109,31 @@ func _configure_interaction(target: Area2D, lines: Array, vocab_ids: Array) -> v
 func _configure_npc(npc: Node, npc_name: String, npc_identity: String, random_walk: bool, words: Array, vocab_ids: Array) -> void:
 	if npc.has_method("set_profile"):
 		npc.set_profile(npc_name, npc_identity, random_walk, words, vocab_ids)
+
+func _create_notebook_button() -> void:
+	var hud = CanvasLayer.new()
+	hud.layer = 5
+	add_child(hud)
+	
+	var btn = Button.new()
+	btn.text = "📖 筆記本"
+	btn.custom_minimum_size = Vector2(120, 40)
+	btn.anchor_left = 1.0
+	btn.anchor_right = 1.0
+	btn.anchor_top = 0.0
+	btn.anchor_bottom = 0.0
+	btn.offset_left = -140
+	btn.offset_top = 16
+	btn.offset_right = -16
+	btn.offset_bottom = 56
+	btn.process_mode = Node.PROCESS_MODE_ALWAYS
+	btn.pressed.connect(_on_notebook_button_pressed)
+	hud.add_child(btn)
+
+func _on_notebook_button_pressed() -> void:
+	var notebook = get_tree().get_first_node_in_group("notebook_ui")
+	if notebook != null:
+		if notebook.visible:
+			notebook.close()
+		else:
+			notebook.open()

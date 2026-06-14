@@ -44,14 +44,10 @@ func _ready() -> void:
 	_update_sprite()
 
 func _update_sprite() -> void:
-	# Use get_node_or_null to prevent null errors during early init
-	var s2d = get_node_or_null("Sprite2D")
-	if s2d != null and sprite_texture != null:
-		s2d.texture = sprite_texture
-		var tex_size = sprite_texture.get_size()
-		if tex_size.y > 0:
-			var scale_factor = 48.0 / tex_size.y
-			s2d.scale = Vector2(scale_factor, scale_factor)
+	# Demo mode: show placeholder body, don't load art sprites
+	var placeholder = get_node_or_null("PlaceholderBody")
+	if placeholder != null:
+		placeholder.visible = true
 
 func _physics_process(_delta: float) -> void:
 	match behavior_state:

@@ -90,7 +90,7 @@ object_vocab_id = &"shui"
 [node name="NPCs" type="Node2D" parent="."]
 
 [node name="ShopOwner" parent="NPCs" instance=ExtResource("3")]
-position = Vector2(250, -175)
+position = Vector2(310, -30)
 character_name = "林阿姨"
 identity = "店長"
 can_random_walk = false
@@ -98,35 +98,34 @@ spoken_words = ["你好", "蘋果", "茶", "水"]
 spoken_vocab_ids = Array[StringName]([&"nihao", &"pingguo", &"cha", &"shui"])
 
 [node name="Assistant" parent="NPCs" instance=ExtResource("3")]
-position = Vector2(-20, 15)
+position = Vector2(-200, -120)
 character_name = "小安"
 identity = "店員"
-behavior_state = 1
-can_random_walk = true
+can_random_walk = false
 spoken_words = ["蘋果", "茶", "水", "蘋果"]
 spoken_vocab_ids = Array[StringName]([&"pingguo", &"cha", &"shui", &"pingguo"])
 
 [node name="CustomerA" parent="NPCs" instance=ExtResource("3")]
-position = Vector2(-260, -75)
+position = Vector2(60, -120)
 character_name = "美美"
 identity = "客人"
-can_random_walk = true
+can_random_walk = false
 spoken_words = ["蘋果", "蘋果"]
 spoken_vocab_ids = Array[StringName]([&"pingguo", &"pingguo"])
 
 [node name="CustomerB" parent="NPCs" instance=ExtResource("3")]
-position = Vector2(-255, 95)
+position = Vector2(-200, 80)
 character_name = "阿明"
 identity = "客人"
-can_random_walk = true
+can_random_walk = false
 spoken_words = ["茶", "你好", "茶"]
 spoken_vocab_ids = Array[StringName]([&"cha", &"nihao", &"cha"])
 
 [node name="CustomerC" parent="NPCs" instance=ExtResource("3")]
-position = Vector2(95, 135)
+position = Vector2(60, 80)
 character_name = "小雨"
 identity = "客人"
-can_random_walk = true
+can_random_walk = false
 spoken_words = ["水", "你", "水"]
 spoken_vocab_ids = Array[StringName]([&"shui", &"ni", &"shui"])
 

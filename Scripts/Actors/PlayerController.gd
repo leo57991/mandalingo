@@ -7,15 +7,10 @@ extends CharacterBody2D
 
 func _ready() -> void:
 	add_to_group("player")
-	var sprite_2d = get_node_or_null("Sprite2D")
-	if sprite_2d != null:
-		var tex = preload("res://Assets/Sprites/player.png")
-		if tex is Texture2D:
-			sprite_2d.texture = tex
-			var tex_size = tex.get_size()
-			if tex_size.y > 0:
-				var scale_factor = 48.0 / tex_size.y
-				sprite_2d.scale = Vector2(scale_factor, scale_factor)
+	# Show placeholder body for demo (no art sprite)
+	var placeholder = get_node_or_null("PlaceholderBody")
+	if placeholder != null:
+		placeholder.visible = true
 
 func _physics_process(_delta: float) -> void:
 	var direction := Input.get_vector("move_left", "move_right", "move_up", "move_down")

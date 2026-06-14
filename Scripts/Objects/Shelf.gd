@@ -24,30 +24,19 @@ func _ready() -> void:
 	_update_item_sprite()
 
 func _update_shelf_sprite() -> void:
-	var s2d = get_node_or_null("Sprite2D")
-	if s2d != null and shelf_texture != null:
-		s2d.texture = shelf_texture
-		var tex_size = shelf_texture.get_size()
-		if tex_size.x > 0:
-			var scale_factor = 144.0 / tex_size.x
-			s2d.scale = Vector2(scale_factor, scale_factor)
+	# Demo mode: show placeholder, don't load art sprite
+	var placeholder = get_node_or_null("PlaceholderShelf")
+	if placeholder != null:
+		placeholder.visible = true
 
 func _update_item_sprite() -> void:
-	var isprite = get_node_or_null("ItemSprite")
-	if isprite != null and item_texture != null:
-		isprite.texture = item_texture
-		var tex_size = item_texture.get_size()
-		if tex_size.y > 0:
-			var scale_factor = 32.0 / tex_size.y
-			isprite.scale = Vector2(scale_factor, scale_factor)
+	# Demo mode: don't load item art sprite
+	pass
 
 func refresh_context() -> void:
 	var word := VocabularyDatabase.get_chinese(object_vocab_id)
-	if word.is_empty():
-		word = String(object_vocab_id)
-
-	object_hint.text = word
+	# Hide the hint label — no text visible until player interacts
+	object_hint.visible = false
 	interaction_target.display_name = String(shelf_id)
-	if interaction_target.has_method("set_dialogue"):
+	if interaction_target.has_method("set_dialogue") and not word.is_empty():
 		interaction_target.set_dialogue([word, word], [object_vocab_id, object_vocab_id])
-	# TODO: Add contextual object animation, such as highlighting apples/tea/water.
