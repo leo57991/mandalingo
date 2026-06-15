@@ -9,8 +9,9 @@ func _ready() -> void:
 	voice_player.bus = "Master"
 	add_child(voice_player)
 
-func play_vocabulary(id: StringName, location: String = "") -> void:
-	VocabularyDatabase.mark_learned(id, location)
+func play_vocabulary(id: StringName, location: String = "", count_as_seen: bool = true) -> void:
+	if count_as_seen:
+		VocabularyDatabase.mark_learned(id, location)
 	
 	var path := VocabularyDatabase.get_audio_path(id)
 	if path.is_empty():

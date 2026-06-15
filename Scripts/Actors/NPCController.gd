@@ -7,6 +7,12 @@ enum BehaviorState {
 	INTERACTING_WITH_OBJECT
 }
 
+const BUBBLE_ABOVE_TOP := -54.0
+const BUBBLE_ABOVE_BOTTOM := -24.0
+const BUBBLE_BELOW_TOP := 24.0
+const BUBBLE_BELOW_BOTTOM := 54.0
+const BUBBLE_SCREEN_MARGIN := 12.0
+
 @export var character_name: String = "NPC"
 @export var identity: String = "人"
 @export var behavior_state: BehaviorState = BehaviorState.IDLE
@@ -65,7 +71,7 @@ func _physics_process(_delta: float) -> void:
 	move_and_slide()
 
 func say(lines: Array, vocab_ids: Array = []) -> void:
-	if lines.is_empty() or is_speaking:
+	if lines.is_empty() or not can_start_dialogue():
 		return
 
 	is_speaking = true
@@ -82,6 +88,9 @@ func say(lines: Array, vocab_ids: Array = []) -> void:
 	behavior_state = BehaviorState.IDLE
 	_pick_next_idle_time()
 
+func can_start_dialogue() -> bool:
+	return not is_speaking
+
 func set_profile(npc_name: String, npc_identity: String, random_walk: bool, words: Array, vocab_ids: Array, delay: float = 1.4, bounds: Rect2 = Rect2()) -> void:
 	character_name = npc_name
 	identity = npc_identity
@@ -96,9 +105,22 @@ func set_profile(npc_name: String, npc_identity: String, random_walk: bool, word
 
 func display_word(word: String, vocab_id: StringName = &"") -> void:
 	speech_label.text = word
+	_position_speech_bubble()
 	speech_bubble.show()
 	speech_timer.start(max(1.5, speech_delay - 0.5))
 	VocabularyDatabase.discover_words_in_text(word, character_name, vocab_id)
+
+func _position_speech_bubble() -> void:
+	var canvas_transform := get_global_transform_with_canvas()
+	var npc_screen_position := canvas_transform * Vector2.ZERO
+	var vertical_scale := canvas_transform.y.length()
+	var use_below := (
+		npc_screen_position.y + BUBBLE_ABOVE_TOP * vertical_scale
+		< BUBBLE_SCREEN_MARGIN
+	)
+
+	speech_bubble.offset_top = BUBBLE_BELOW_TOP if use_below else BUBBLE_ABOVE_TOP
+	speech_bubble.offset_bottom = BUBBLE_BELOW_BOTTOM if use_below else BUBBLE_ABOVE_BOTTOM
 
 func _process_idle(delta: float) -> void:
 	velocity = Vector2.ZERO

@@ -5,6 +5,7 @@ class_name NotebookUI
 @onready var close_button: Button = %CloseButton
 
 var word_item_scene := preload("res://Scenes/UI/NotebookWordItem.tscn")
+var _was_paused := false
 
 func _ready() -> void:
 	add_to_group("notebook_ui")
@@ -21,9 +22,10 @@ func _unhandled_input(event: InputEvent) -> void:
 			get_viewport().set_input_as_handled()
 
 func open() -> void:
-	if visible:
+	if visible or _is_dialogue_active():
 		return
 	AudioManager.play_audio_file("res://Assets/SFX/notebook_flip.ogg")
+	_was_paused = get_tree().paused
 	visible = true
 	get_tree().paused = true
 	_populate_words()
@@ -36,11 +38,12 @@ func close() -> void:
 		return
 	AudioManager.play_audio_file("res://Assets/SFX/notebook_flip.ogg")
 	visible = false
-	get_tree().paused = false
+	get_tree().paused = _was_paused
 
 func _populate_words() -> void:
 	# Clear existing
 	for child in word_list.get_children():
+		word_list.remove_child(child)
 		child.queue_free()
 	
 	# Get all vocabulary resources
@@ -59,3 +62,11 @@ func _populate_words() -> void:
 		var item = word_item_scene.instantiate()
 		word_list.add_child(item)
 		item.setup(entry)
+
+func _is_dialogue_active() -> bool:
+	if DialogueSystem.is_showing:
+		return true
+	for npc in get_tree().get_nodes_in_group("npc"):
+		if "is_speaking" in npc and npc.is_speaking:
+			return true
+	return false

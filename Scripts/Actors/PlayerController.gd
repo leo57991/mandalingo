@@ -15,7 +15,7 @@ func _ready() -> void:
 		placeholder.visible = true
 
 func _physics_process(_delta: float) -> void:
-	if _is_npc_dialogue_active():
+	if _is_dialogue_active():
 		velocity = Vector2.ZERO
 		move_and_slide()
 		return
@@ -35,6 +35,8 @@ func _process(_delta: float) -> void:
 	_was_j_pressed = Input.is_physical_key_pressed(KEY_J)
 
 	if toggle_notebook:
+		if _is_dialogue_active():
+			return
 		if notebook != null:
 			if notebook.visible:
 				notebook.close()
@@ -67,7 +69,9 @@ func _get_closest_interaction_target() -> Area2D:
 
 	return closest
 
-func _is_npc_dialogue_active() -> bool:
+func _is_dialogue_active() -> bool:
+	if DialogueSystem.is_showing:
+		return true
 	for npc in get_tree().get_nodes_in_group("npc"):
 		if "is_speaking" in npc and npc.is_speaking:
 			return true

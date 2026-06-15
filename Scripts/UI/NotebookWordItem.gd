@@ -37,7 +37,7 @@ func _ready() -> void:
 
 func _on_play_pressed() -> void:
 	if vocab_entry != null:
-		AudioManager.play_vocabulary(vocab_entry.id)
+		AudioManager.play_vocabulary(vocab_entry.id, "", false)
 
 func _on_guess_changed(new_text: String) -> void:
 	if vocab_entry != null:
