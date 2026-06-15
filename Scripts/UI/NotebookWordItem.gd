@@ -16,8 +16,23 @@ func setup(entry: VocabularyEntry) -> void:
 		guess_edit.text = entry.user_guess
 		guess_edit.editable = true
 		guess_edit.placeholder_text = "Enter your guess..."
-		var loc = entry.last_seen if not entry.last_seen.is_empty() else "無"
-		stats_label.text = "看過 " + str(entry.seen_count) + " 次 | " + loc
+		
+		var raw_loc = entry.last_seen if not entry.last_seen.is_empty() else "無"
+		var loc := ""
+		match raw_loc:
+			"林阿姨": loc = "Auntie Lin"
+			"小安": loc = "Xiao An"
+			"美美": loc = "Mei Mei"
+			"阿明": loc = "Ah Ming"
+			"小雨": loc = "Xiao Yu"
+			"蘋果貨架": loc = "Apple Shelf"
+			"茶葉貨架": loc = "Tea Shelf"
+			"水貨架": loc = "Water Shelf"
+			"無", "": loc = "None"
+			_: loc = raw_loc
+		
+		var times_str = "time" if entry.seen_count == 1 else "times"
+		stats_label.text = "Seen " + str(entry.seen_count) + " " + times_str + " | " + loc
 		play_button.disabled = false
 		play_button.visible = true
 	else:
@@ -25,7 +40,7 @@ func setup(entry: VocabularyEntry) -> void:
 		guess_edit.text = ""
 		guess_edit.editable = false
 		guess_edit.placeholder_text = "未解鎖 / Locked"
-		stats_label.text = "看過 0 次 | 無"
+		stats_label.text = "Seen 0 times | None"
 		play_button.disabled = true
 		play_button.visible = false
 
