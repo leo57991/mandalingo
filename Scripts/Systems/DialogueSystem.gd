@@ -10,6 +10,7 @@ var is_showing := false
 var active_location: String = ""
 
 func _ready() -> void:
+	layer = 15
 	var popup_scene := preload("res://Scenes/UI/DialoguePopup.tscn")
 	popup = popup_scene.instantiate()
 	add_child(popup)
