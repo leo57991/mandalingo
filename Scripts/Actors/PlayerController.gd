@@ -44,17 +44,21 @@ func _process(_delta: float) -> void:
 				notebook.open()
 			return
 
+func _unhandled_input(event: InputEvent) -> void:
+	var notebook = get_tree().get_first_node_in_group("notebook_ui")
 	if notebook != null and notebook.visible:
 		return
 
-	if Input.is_action_just_pressed("interact"):
+	if event.is_action_pressed("interact"):
 		if DialogueSystem.is_showing:
 			DialogueSystem.advance()
+			get_viewport().set_input_as_handled()
 			return
 
 		var target := _get_closest_interaction_target()
 		if target != null:
 			target.interact()
+			get_viewport().set_input_as_handled()
 
 func _get_closest_interaction_target() -> Area2D:
 	var closest: Area2D = null
