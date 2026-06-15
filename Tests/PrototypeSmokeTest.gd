@@ -81,6 +81,24 @@ func _validate_scene_structure(scene: Node2D) -> void:
 			"%s dialogue and vocabulary arrays align" % npc.name
 		)
 
+	var counter_visual: Sprite2D = scene.get_node("Counter/CounterVisual")
+	_expect(counter_visual.texture != null, "Counter uses a transparent table texture")
+
+	for shelf_path in [
+		"Shelves/ShelfApples",
+		"Shelves/ShelfTea",
+		"Shelves/ShelfWater",
+	]:
+		var shelf: Node = scene.get_node(shelf_path)
+		var expected_texture: Texture2D = shelf.item_texture
+		_expect(expected_texture != null, "%s has an item texture" % shelf.name)
+		for item_name in ["ItemLeft", "ItemCenter", "ItemRight"]:
+			var item_sprite: Sprite2D = shelf.get_node(item_name)
+			_expect(
+				item_sprite.texture == expected_texture,
+				"%s displays %s" % [shelf.name, item_name]
+			)
+
 func _validate_npc_dialogue(scene: Node2D) -> void:
 	var player: CharacterBody2D = scene.get_node("Player")
 	var assistant: CharacterBody2D = scene.get_node("NPCs/Assistant")

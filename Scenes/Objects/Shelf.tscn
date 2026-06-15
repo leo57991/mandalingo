@@ -10,18 +10,27 @@ size = Vector2(144, 44)
 size = Vector2(172, 72)
 
 [node name="Shelf" type="StaticBody2D"]
+texture_filter = 1
 collision_layer = 4
 script = ExtResource("1")
 
 [node name="PlaceholderShelf" type="Polygon2D" parent="."]
-visible = false
 color = Color(0.45, 0.33, 0.22, 1)
 polygon = PackedVector2Array(-72, -22, 72, -22, 72, 22, -72, 22)
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 
-[node name="ItemSprite" type="Sprite2D" parent="."]
-position = Vector2(0, -12)
+[node name="ItemLeft" type="Sprite2D" parent="."]
+position = Vector2(-42, -26)
+z_index = 1
+
+[node name="ItemCenter" type="Sprite2D" parent="."]
+position = Vector2(0, -26)
+z_index = 1
+
+[node name="ItemRight" type="Sprite2D" parent="."]
+position = Vector2(42, -26)
+z_index = 1
 
 [node name="ShelfCollision" type="CollisionShape2D" parent="."]
 shape = SubResource("RectangleShape2D_body")

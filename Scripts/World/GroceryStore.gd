@@ -1,5 +1,10 @@
 extends Node2D
 
+const COUNTER_TEXTURE := preload("res://Assets/Sprites/counter_table.png")
+const APPLE_ITEM_TEXTURE := preload("res://Assets/Sprites/Items/apple_pixel.png")
+const TEA_ITEM_TEXTURE := preload("res://Assets/Sprites/Items/tea_pixel.png")
+const WATER_ITEM_TEXTURE := preload("res://Assets/Sprites/Items/water_pixel.png")
+
 func _ready() -> void:
 	# Load and setup floor visual only (keep art for floor)
 	var floor_sprite = get_node_or_null("Floor")
@@ -14,12 +19,11 @@ func _ready() -> void:
 	# Setup counter visual
 	var counter_sprite = get_node_or_null("Counter/CounterVisual")
 	if counter_sprite is Sprite2D:
-		var tex = preload("res://Assets/Sprites/counter.png")
-		if tex is Texture2D:
-			counter_sprite.texture = tex
-			var tex_size = tex.get_size()
-			if tex_size.x > 0 and tex_size.y > 0:
-				counter_sprite.scale = Vector2(120.0 / tex_size.x, 250.0 / tex_size.y)
+		counter_sprite.texture = COUNTER_TEXTURE
+		var tex_size := COUNTER_TEXTURE.get_size()
+		if tex_size.x > 0:
+			var uniform_scale := 144.0 / tex_size.x
+			counter_sprite.scale = Vector2.ONE * uniform_scale
 
 	_configure_shelves()
 	_configure_npcs()
@@ -38,8 +42,15 @@ func _ready() -> void:
 	_create_notebook_button()
 
 func _configure_shelves() -> void:
-	# Show placeholder visuals for shelves (no art textures)
 	for shelf in get_tree().get_nodes_in_group("vocabulary_shelf"):
+		if "shelf_id" in shelf and "item_texture" in shelf:
+			match shelf.shelf_id:
+				&"shelf_apples":
+					shelf.item_texture = APPLE_ITEM_TEXTURE
+				&"shelf_tea":
+					shelf.item_texture = TEA_ITEM_TEXTURE
+				&"shelf_water":
+					shelf.item_texture = WATER_ITEM_TEXTURE
 		if shelf.has_method("refresh_context"):
 			shelf.refresh_context()
 

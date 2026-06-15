@@ -15,7 +15,11 @@ extends StaticBody2D
 @onready var interaction_target: Area2D = %InteractionTarget
 @onready var object_hint: Label = %ObjectHint
 @onready var sprite_2d: Sprite2D = $Sprite2D
-@onready var item_sprite: Sprite2D = $ItemSprite
+@onready var item_sprites: Array[Sprite2D] = [
+	$ItemLeft,
+	$ItemCenter,
+	$ItemRight,
+]
 
 func _ready() -> void:
 	add_to_group("vocabulary_shelf")
@@ -24,14 +28,20 @@ func _ready() -> void:
 	_update_item_sprite()
 
 func _update_shelf_sprite() -> void:
-	# Demo mode: show placeholder, don't load art sprite
 	var placeholder = get_node_or_null("PlaceholderShelf")
 	if placeholder != null:
-		placeholder.visible = true
+		placeholder.visible = shelf_texture == null
+
+	sprite_2d.texture = shelf_texture
+	sprite_2d.visible = shelf_texture != null
 
 func _update_item_sprite() -> void:
-	# Demo mode: don't load item art sprite
-	pass
+	if not is_node_ready():
+		return
+
+	for item_sprite in item_sprites:
+		item_sprite.texture = item_texture
+		item_sprite.visible = item_texture != null
 
 func refresh_context() -> void:
 	var word := VocabularyDatabase.get_chinese(object_vocab_id)
