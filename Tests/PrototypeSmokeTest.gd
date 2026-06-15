@@ -36,6 +36,7 @@ func _run() -> void:
 	_validate_vocabulary()
 	_validate_scene_structure(scene)
 	_validate_telemetry()
+	await _validate_shop_owner_counter_interaction(scene)
 	await _validate_npc_dialogue(scene)
 	await _validate_object_dialogue(scene)
 	_validate_notebook(scene)
@@ -98,6 +99,25 @@ func _validate_scene_structure(scene: Node2D) -> void:
 				item_sprite.texture == expected_texture,
 				"%s displays %s" % [shelf.name, item_name]
 			)
+
+func _validate_shop_owner_counter_interaction(scene: Node2D) -> void:
+	var player: CharacterBody2D = scene.get_node("Player")
+	var counter: StaticBody2D = scene.get_node("Counter")
+	var shop_owner_target: Area2D = scene.get_node("NPCs/ShopOwner/InteractionTarget")
+	var interaction_shape: CollisionShape2D = shop_owner_target.get_node("InteractionShape")
+
+	_expect(
+		interaction_shape.shape is RectangleShape2D,
+		"Shop owner uses a counter-reaching interaction shape"
+	)
+
+	player.global_position = counter.global_position + Vector2(-84, 0)
+	await physics_frame
+	await physics_frame
+	_expect(
+		player._get_closest_interaction_target() == shop_owner_target,
+		"Player can target the shop owner from across the counter"
+	)
 
 func _validate_npc_dialogue(scene: Node2D) -> void:
 	var player: CharacterBody2D = scene.get_node("Player")

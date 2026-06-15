@@ -4,6 +4,8 @@ const COUNTER_TEXTURE := preload("res://Assets/Sprites/counter_table.png")
 const APPLE_ITEM_TEXTURE := preload("res://Assets/Sprites/Items/apple_pixel.png")
 const TEA_ITEM_TEXTURE := preload("res://Assets/Sprites/Items/tea_pixel.png")
 const WATER_ITEM_TEXTURE := preload("res://Assets/Sprites/Items/water_pixel.png")
+const SHOP_OWNER_INTERACTION_SIZE := Vector2(156, 110)
+const SHOP_OWNER_INTERACTION_OFFSET := Vector2(-58, 0)
 
 func _ready() -> void:
 	# Load and setup floor visual only (keep art for floor)
@@ -60,6 +62,7 @@ func _configure_npcs() -> void:
 	$NPCs/CustomerB.position = Vector2(-280, 10)
 	$NPCs/CustomerC.position = Vector2(-280, 100)
 	$NPCs/CustomerA.position = Vector2(160, 190) # entrance (bottom right)
+	_configure_shop_owner_interaction()
 
 	_configure_npc(
 		$NPCs/ShopOwner,
@@ -135,6 +138,15 @@ func _configure_npcs() -> void:
 		["你好", "這是水"],
 		[&"nihao", &"shui"]
 	)
+
+func _configure_shop_owner_interaction() -> void:
+	var interaction_shape: CollisionShape2D = (
+		$NPCs/ShopOwner/InteractionTarget/InteractionShape
+	)
+	var counter_reach := RectangleShape2D.new()
+	counter_reach.size = SHOP_OWNER_INTERACTION_SIZE
+	interaction_shape.position = SHOP_OWNER_INTERACTION_OFFSET
+	interaction_shape.shape = counter_reach
 
 func _configure_interaction(target: Area2D, lines: Array, vocab_ids: Array) -> void:
 	if target.has_method("set_dialogue"):
