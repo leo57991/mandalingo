@@ -1,6 +1,6 @@
 extends Node2D
 
-const COUNTER_TEXTURE := preload("res://Assets/Sprites/counter_table.png")
+const COUNTER_TEXTURE := preload("res://Assets/Sprites/counter_kenney.png")
 const APPLE_ITEM_TEXTURE := preload("res://Assets/Sprites/Items/apple_pixel.png")
 const TEA_ITEM_TEXTURE := preload("res://Assets/Sprites/Items/tea_pixel.png")
 const WATER_ITEM_TEXTURE := preload("res://Assets/Sprites/Items/water_pixel.png")
@@ -22,10 +22,6 @@ func _ready() -> void:
 	var counter_sprite = get_node_or_null("Counter/CounterVisual")
 	if counter_sprite is Sprite2D:
 		counter_sprite.texture = COUNTER_TEXTURE
-		var tex_size := COUNTER_TEXTURE.get_size()
-		if tex_size.x > 0:
-			var uniform_scale := 144.0 / tex_size.x
-			counter_sprite.scale = Vector2.ONE * uniform_scale
 
 	_configure_shelves()
 	_configure_npcs()

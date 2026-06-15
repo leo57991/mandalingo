@@ -84,6 +84,11 @@ func _validate_scene_structure(scene: Node2D) -> void:
 
 	var counter_visual: Sprite2D = scene.get_node("Counter/CounterVisual")
 	_expect(counter_visual.texture != null, "Counter uses a transparent table texture")
+	var counter_size := counter_visual.region_rect.size * counter_visual.scale
+	_expect(
+		counter_size.is_equal_approx(Vector2(120, 250)),
+		"Counter keeps the original long rectangular footprint"
+	)
 
 	for shelf_path in [
 		"Shelves/ShelfApples",

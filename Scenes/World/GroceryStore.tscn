@@ -14,7 +14,7 @@ size = Vector2(720, 24)
 size = Vector2(24, 480)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_counter"]
-size = Vector2(144, 94)
+size = Vector2(120, 250)
 
 [node name="GroceryStore" type="Node2D"]
 script = ExtResource("1")
@@ -72,7 +72,12 @@ position = Vector2(260, -30)
 collision_layer = 4
 
 [node name="CounterVisual" type="Sprite2D" parent="Counter"]
+modulate = Color(0.58, 0.42, 0.3, 1)
 texture_filter = 1
+z_index = 1
+scale = Vector2(7.5, 20.8333)
+region_enabled = true
+region_rect = Rect2(0, 4, 16, 12)
 
 [node name="CounterCollision" type="CollisionShape2D" parent="Counter"]
 shape = SubResource("RectangleShape2D_counter")
