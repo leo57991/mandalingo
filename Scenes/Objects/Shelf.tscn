@@ -21,15 +21,15 @@ polygon = PackedVector2Array(-72, -22, 72, -22, 72, 22, -72, 22)
 [node name="Sprite2D" type="Sprite2D" parent="."]
 
 [node name="ItemLeft" type="Sprite2D" parent="."]
-position = Vector2(-42, -26)
+position = Vector2(-42, 0)
 z_index = 1
 
 [node name="ItemCenter" type="Sprite2D" parent="."]
-position = Vector2(0, -26)
+position = Vector2(0, 0)
 z_index = 1
 
 [node name="ItemRight" type="Sprite2D" parent="."]
-position = Vector2(42, -26)
+position = Vector2(42, 0)
 z_index = 1
 
 [node name="ShelfCollision" type="CollisionShape2D" parent="."]
