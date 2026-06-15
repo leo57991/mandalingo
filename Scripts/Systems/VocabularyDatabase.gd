@@ -1,5 +1,7 @@
 extends Node
 
+signal vocabulary_first_seen(id: StringName)
+
 const VOCABULARY_DIR := "res://Data/Vocabulary"
 
 var entries: Dictionary[StringName, Resource] = {}
@@ -42,11 +44,14 @@ func get_chinese(id: StringName) -> String:
 func mark_learned(id: StringName, location: String = "") -> void:
 	var entry: Resource = get_entry(id)
 	if entry != null:
+		var is_first_encounter: bool = entry.seen_count == 0
 		entry.learned = true
 		entry.seen_count += 1
 		if not location.is_empty():
 			entry.last_seen = location
 		TelemetryManager.track_vocabulary_seen(id, entry.seen_count, entry.last_seen)
+		if is_first_encounter:
+			vocabulary_first_seen.emit(id)
 
 func discover_words_in_text(text: String, location: String = "", exclude_id: StringName = &"") -> void:
 	for id in entries:

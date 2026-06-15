@@ -1,11 +1,15 @@
 extends CanvasLayer
 class_name NotebookUI
 
+signal opened
+
 @onready var word_list: VBoxContainer = %WordList
 @onready var close_button: Button = %CloseButton
 
 var word_item_scene := preload("res://Scenes/UI/NotebookWordItem.tscn")
 var _was_paused := false
+var _guided_open_pending := false
+var _guided_restore_pause := false
 
 func _ready() -> void:
 	add_to_group("notebook_ui")
@@ -15,23 +19,38 @@ func _ready() -> void:
 
 func _unhandled_input(event: InputEvent) -> void:
 	if not visible:
+		if (
+			_guided_open_pending
+			and event is InputEventKey
+			and event.pressed
+			and not event.echo
+			and (event.keycode == KEY_J or event.is_action_pressed("ui_focus_next"))
+		):
+			open()
+			get_viewport().set_input_as_handled()
 		return
 	if event is InputEventKey and event.pressed and not event.echo:
 		if event.keycode == KEY_J or event.is_action_pressed("ui_focus_next"):
 			close()
 			get_viewport().set_input_as_handled()
 
+func prepare_guided_open(previous_pause_state: bool) -> void:
+	_guided_open_pending = true
+	_guided_restore_pause = previous_pause_state
+
 func open() -> void:
-	if visible or _is_dialogue_active():
+	if visible or (_is_dialogue_active() and not _guided_open_pending):
 		return
 	AudioManager.play_audio_file("res://Assets/SFX/notebook_flip.ogg")
-	_was_paused = get_tree().paused
+	_was_paused = _guided_restore_pause if _guided_open_pending else get_tree().paused
+	_guided_open_pending = false
 	visible = true
 	get_tree().paused = true
 	_populate_words()
 	TelemetryManager.record_event("notebook_opened", {
 		"visible_word_count": word_list.get_child_count(),
 	})
+	opened.emit()
 
 func close() -> void:
 	if not visible:

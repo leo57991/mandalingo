@@ -7,6 +7,14 @@ const WATER_ITEM_TEXTURE := preload("res://Assets/Sprites/Items/water_pixel.png"
 const SHOP_OWNER_INTERACTION_SIZE := Vector2(156, 110)
 const SHOP_OWNER_INTERACTION_OFFSET := Vector2(-58, 0)
 
+var _notebook_button: Button
+var _notebook_attention_tween: Tween
+var _notebook_style_normal: StyleBoxFlat
+var _notebook_style_hover: StyleBoxFlat
+var _notebook_style_pressed: StyleBoxFlat
+var _notebook_attention_active := false
+var _has_shown_notebook_discovery_hint := false
+
 func _ready() -> void:
 	# Load and setup floor visual only (keep art for floor)
 	var floor_sprite = get_node_or_null("Floor")
@@ -38,6 +46,7 @@ func _ready() -> void:
 
 	# Create notebook open button (HUD)
 	_create_notebook_button()
+	VocabularyDatabase.vocabulary_first_seen.connect(_on_vocabulary_first_seen)
 
 func _configure_shelves() -> void:
 	for shelf in get_tree().get_nodes_in_group("vocabulary_shelf"):
@@ -154,6 +163,7 @@ func _configure_npc(npc: Node, npc_name: String, npc_identity: String, random_wa
 
 func _create_notebook_button() -> void:
 	var hud = CanvasLayer.new()
+	hud.name = "NotebookHUD"
 	hud.layer = 5
 	add_child(hud)
 	
@@ -164,6 +174,7 @@ func _create_notebook_button() -> void:
 	hud.add_child(base_control)
 	
 	var btn = Button.new()
+	btn.name = "NotebookButton"
 	btn.text = "" # No text, icon only
 	
 	var icon_tex = load("res://Assets/Sprites/book_icon.png")
@@ -182,39 +193,107 @@ func _create_notebook_button() -> void:
 	btn.offset_right = -16
 	btn.offset_bottom = 64
 	btn.process_mode = Node.PROCESS_MODE_ALWAYS
+	btn.pivot_offset = Vector2(24, 24)
 	
 	# Create circular styling
-	var style_normal = StyleBoxFlat.new()
-	style_normal.bg_color = Color(0.15, 0.15, 0.15, 0.7)
-	style_normal.corner_radius_top_left = 24
-	style_normal.corner_radius_top_right = 24
-	style_normal.corner_radius_bottom_left = 24
-	style_normal.corner_radius_bottom_right = 24
-	style_normal.set_content_margin_all(0)
+	_notebook_style_normal = StyleBoxFlat.new()
+	_notebook_style_normal.bg_color = Color(0.15, 0.15, 0.15, 0.7)
+	_notebook_style_normal.corner_radius_top_left = 24
+	_notebook_style_normal.corner_radius_top_right = 24
+	_notebook_style_normal.corner_radius_bottom_left = 24
+	_notebook_style_normal.corner_radius_bottom_right = 24
+	_notebook_style_normal.set_content_margin_all(0)
 	
-	var style_hover = StyleBoxFlat.new()
-	style_hover.bg_color = Color(0.25, 0.25, 0.25, 0.8)
-	style_hover.corner_radius_top_left = 24
-	style_hover.corner_radius_top_right = 24
-	style_hover.corner_radius_bottom_left = 24
-	style_hover.corner_radius_bottom_right = 24
-	style_hover.set_content_margin_all(0)
+	_notebook_style_hover = StyleBoxFlat.new()
+	_notebook_style_hover.bg_color = Color(0.25, 0.25, 0.25, 0.8)
+	_notebook_style_hover.corner_radius_top_left = 24
+	_notebook_style_hover.corner_radius_top_right = 24
+	_notebook_style_hover.corner_radius_bottom_left = 24
+	_notebook_style_hover.corner_radius_bottom_right = 24
+	_notebook_style_hover.set_content_margin_all(0)
 	
-	var style_pressed = StyleBoxFlat.new()
-	style_pressed.bg_color = Color(0.1, 0.1, 0.1, 0.9)
-	style_pressed.corner_radius_top_left = 24
-	style_pressed.corner_radius_top_right = 24
-	style_pressed.corner_radius_bottom_left = 24
-	style_pressed.corner_radius_bottom_right = 24
-	style_pressed.set_content_margin_all(0)
+	_notebook_style_pressed = StyleBoxFlat.new()
+	_notebook_style_pressed.bg_color = Color(0.1, 0.1, 0.1, 0.9)
+	_notebook_style_pressed.corner_radius_top_left = 24
+	_notebook_style_pressed.corner_radius_top_right = 24
+	_notebook_style_pressed.corner_radius_bottom_left = 24
+	_notebook_style_pressed.corner_radius_bottom_right = 24
+	_notebook_style_pressed.set_content_margin_all(0)
 	
-	btn.add_theme_stylebox_override("normal", style_normal)
-	btn.add_theme_stylebox_override("hover", style_hover)
-	btn.add_theme_stylebox_override("pressed", style_pressed)
-	btn.add_theme_stylebox_override("focus", style_normal) # Keep same as normal on focus
+	btn.add_theme_stylebox_override("normal", _notebook_style_normal)
+	btn.add_theme_stylebox_override("hover", _notebook_style_hover)
+	btn.add_theme_stylebox_override("pressed", _notebook_style_pressed)
+	btn.add_theme_stylebox_override("focus", _notebook_style_normal)
 	
 	btn.pressed.connect(_on_notebook_button_pressed)
 	base_control.add_child(btn)
+	_notebook_button = btn
+
+	var notebook: Node = get_tree().get_first_node_in_group("notebook_ui")
+	if notebook != null:
+		notebook.opened.connect(_stop_notebook_attention)
+
+func _on_vocabulary_first_seen(_id: StringName) -> void:
+	if _has_shown_notebook_discovery_hint or _notebook_button == null:
+		return
+
+	_has_shown_notebook_discovery_hint = true
+	_notebook_attention_active = true
+	var previous_pause_state := get_tree().paused
+	var notebook: Node = get_tree().get_first_node_in_group("notebook_ui")
+	if notebook != null:
+		notebook.prepare_guided_open(previous_pause_state)
+	get_tree().paused = true
+	_start_notebook_attention()
+
+func _start_notebook_attention() -> void:
+	var glow_style := _notebook_style_normal.duplicate() as StyleBoxFlat
+	glow_style.bg_color = Color(0.95, 0.7, 0.16, 0.95)
+	glow_style.border_width_left = 3
+	glow_style.border_width_top = 3
+	glow_style.border_width_right = 3
+	glow_style.border_width_bottom = 3
+	glow_style.border_color = Color(1.0, 0.95, 0.55, 1.0)
+	glow_style.shadow_color = Color(1.0, 0.72, 0.15, 0.8)
+	glow_style.shadow_size = 12
+	_notebook_button.add_theme_stylebox_override("normal", glow_style)
+	_notebook_button.add_theme_stylebox_override("hover", glow_style)
+	_notebook_button.add_theme_stylebox_override("focus", glow_style)
+
+	_notebook_attention_tween = create_tween()
+	_notebook_attention_tween.set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
+	_notebook_attention_tween.set_loops()
+	_notebook_attention_tween.tween_property(
+		_notebook_button, "scale", Vector2(1.18, 1.18), 0.22
+	).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	_notebook_attention_tween.parallel().tween_property(
+		_notebook_button, "rotation", deg_to_rad(-7.0), 0.22
+	)
+	_notebook_attention_tween.tween_property(
+		_notebook_button, "scale", Vector2.ONE, 0.22
+	).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+	_notebook_attention_tween.parallel().tween_property(
+		_notebook_button, "rotation", deg_to_rad(7.0), 0.22
+	)
+	_notebook_attention_tween.tween_property(
+		_notebook_button, "rotation", 0.0, 0.12
+	)
+
+func _stop_notebook_attention() -> void:
+	if not _notebook_attention_active:
+		return
+	_notebook_attention_active = false
+	if _notebook_attention_tween != null:
+		_notebook_attention_tween.kill()
+		_notebook_attention_tween = null
+	_notebook_button.scale = Vector2.ONE
+	_notebook_button.rotation = 0.0
+	_notebook_button.add_theme_stylebox_override("normal", _notebook_style_normal)
+	_notebook_button.add_theme_stylebox_override("hover", _notebook_style_hover)
+	_notebook_button.add_theme_stylebox_override("focus", _notebook_style_normal)
+
+func is_notebook_attention_active() -> bool:
+	return _notebook_attention_active
 
 func _on_notebook_button_pressed() -> void:
 	var notebook = get_tree().get_first_node_in_group("notebook_ui")

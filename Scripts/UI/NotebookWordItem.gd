@@ -15,7 +15,7 @@ func setup(entry: VocabularyEntry) -> void:
 		chinese_label.text = entry.chinese
 		guess_edit.text = entry.user_guess
 		guess_edit.editable = true
-		guess_edit.placeholder_text = "輸入您的猜測..."
+		guess_edit.placeholder_text = "Enter your guess..."
 		var loc = entry.last_seen if not entry.last_seen.is_empty() else "無"
 		stats_label.text = "看過 " + str(entry.seen_count) + " 次 | " + loc
 		play_button.disabled = false

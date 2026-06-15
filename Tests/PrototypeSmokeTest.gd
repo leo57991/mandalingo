@@ -147,6 +147,15 @@ func _validate_npc_dialogue(scene: Node2D) -> void:
 	_expect(label.text == "你好", "NPC dialogue starts with 你好")
 	_expect(bubble.visible, "NPC speech bubble is visible")
 	_expect(bubble.offset_bottom <= -20.0, "Speech bubble stays close above the NPC")
+	var notebook_button: Button = scene.get_node("NotebookHUD/HUDBase/NotebookButton")
+	_expect(paused, "First vocabulary encounter pauses the game")
+	_expect(scene.is_notebook_attention_active(), "Notebook icon requests attention")
+	_expect(notebook_button.text.is_empty(), "Notebook guidance uses no text prompt")
+	await create_timer(0.12, true).timeout
+	_expect(
+		notebook_button.scale != Vector2.ONE or not is_zero_approx(notebook_button.rotation),
+		"Notebook attention animation runs while the game is paused"
+	)
 
 	var seen_before_repeat: int = root.get_node("VocabularyDatabase").get_entry(&"nihao").seen_count
 	target.interact()
@@ -158,6 +167,12 @@ func _validate_npc_dialogue(scene: Node2D) -> void:
 	)
 
 	var notebook: CanvasLayer = get_first_node_in_group("notebook_ui")
+	scene._on_notebook_button_pressed()
+	_expect(notebook.visible, "Guided notebook opens during the first dialogue")
+	_expect(not scene.is_notebook_attention_active(), "Notebook attention stops after opening")
+	notebook.close()
+	_expect(not paused, "Closing the guided notebook resumes the dialogue")
+
 	notebook.open()
 	_expect(not notebook.visible, "Notebook cannot open during dialogue")
 
@@ -248,12 +263,22 @@ func _validate_notebook(scene: Node2D) -> void:
 	_expect(entry.seen_count == seen_before_replay, "Notebook replay does not increase seen count")
 
 	database.mark_learned(&"cha", "smoke_test")
+	_expect(
+		not scene.is_notebook_attention_active(),
+		"Later first-time words do not repeat the notebook tutorial"
+	)
 	notebook._populate_words()
 	notebook._populate_words()
 	_expect(
 		notebook.word_list.get_child_count() == _seen_vocabulary_count(database),
 		"Notebook rebuild does not duplicate cards"
 	)
+	var guess_uses_english := true
+	for item in notebook.word_list.get_children():
+		var guess_edit: LineEdit = item.get_node("HBox/GuessEdit")
+		if guess_edit.placeholder_text != "Enter your guess...":
+			guess_uses_english = false
+	_expect(guess_uses_english, "Notebook guess prompt is in English")
 
 	paused = true
 	notebook.open()
