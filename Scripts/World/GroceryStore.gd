@@ -91,7 +91,7 @@ func _configure_npcs() -> void:
 	_configure_npc(
 		$NPCs/CustomerA,
 		"美美",
-		"客人",
+		"顧客",
 		false, # Stationary next to entrance
 		["你好"],
 		[&"nihao"],
@@ -100,7 +100,7 @@ func _configure_npcs() -> void:
 	_configure_npc(
 		$NPCs/CustomerB,
 		"阿明",
-		"客人",
+		"顧客",
 		true,
 		["你好", "這是茶"],
 		[&"nihao", &"cha"],
@@ -110,7 +110,7 @@ func _configure_npcs() -> void:
 	_configure_npc(
 		$NPCs/CustomerC,
 		"小雨",
-		"客人",
+		"顧客",
 		true,
 		["你好", "這是水"],
 		[&"nihao", &"shui"],
@@ -120,8 +120,8 @@ func _configure_npcs() -> void:
 
 	_configure_interaction(
 		$NPCs/ShopOwner/InteractionTarget,
-		["你好", "我是人", "你是誰"],
-		[&"nihao", &"wo", &"shei"]
+		["你好", "這是蘋果", "這是茶", "這是水"],
+		[&"nihao", &"pingguo", &"cha", &"shui"]
 	)
 	_configure_interaction(
 		$NPCs/Assistant/InteractionTarget,

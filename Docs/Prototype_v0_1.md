@@ -31,6 +31,9 @@ Workflow rule: every Godot project change made through Codex must be committed a
 - Player-facing dialogue should remain Chinese-first.
 - Audio paths are scaffolded but not yet populated.
 - Placeholder geometry is intentionally simple until art direction begins.
+- Prototype v0.1 active vocabulary is limited to `你好`, `這`, `是`, `蘋果`, `茶`, and `水`.
+- Notebook discovery is explicit: a line only unlocks the vocabulary id assigned to that line, never arbitrary substrings inside the displayed text.
+- Pronouns and identity words such as `我`, `你`, `他`, `我們`, `你們`, `他們`, `人`, and `誰` are intentionally out of scope until the scene can provide stronger contextual evidence.
 
 ## TODO
 

@@ -14,7 +14,7 @@ const BUBBLE_BELOW_BOTTOM := 54.0
 const BUBBLE_SCREEN_MARGIN := 12.0
 
 @export var character_name: String = "NPC"
-@export var identity: String = "人"
+@export var identity: String = "角色"
 @export var behavior_state: BehaviorState = BehaviorState.IDLE
 @export var can_random_walk: bool = true
 @export var random_walk_bounds: Rect2 = Rect2(Vector2(-300, -170), Vector2(380, 330))
@@ -108,7 +108,7 @@ func display_word(word: String, vocab_id: StringName = &"") -> void:
 	_position_speech_bubble()
 	speech_bubble.show()
 	speech_timer.start(max(1.5, speech_delay - 0.5))
-	VocabularyDatabase.discover_words_in_text(word, character_name, vocab_id)
+	VocabularyDatabase.mark_seen_from_dialogue(vocab_id, character_name)
 
 func _position_speech_bubble() -> void:
 	var canvas_transform := get_global_transform_with_canvas()

@@ -57,8 +57,6 @@ func _show_current_line() -> void:
 	if popup != null:
 		popup.show_chinese(text)
 
-	# Scan the displayed dialogue line for any Chinese characters to auto-discover them
-	VocabularyDatabase.discover_words_in_text(text, active_location, vocab_id)
-
 	if not String(vocab_id).is_empty():
+		VocabularyDatabase.mark_seen_from_dialogue(vocab_id, active_location)
 		AudioManager.play_vocabulary(vocab_id, active_location)

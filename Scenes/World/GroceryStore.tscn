@@ -120,7 +120,7 @@ spoken_vocab_ids = Array[StringName]([&"nihao", &"pingguo"])
 [node name="CustomerA" parent="NPCs" instance=ExtResource("3")]
 position = Vector2(60, -120)
 character_name = "美美"
-identity = "客人"
+identity = "顧客"
 can_random_walk = false
 spoken_words = ["蘋果", "蘋果"]
 spoken_vocab_ids = Array[StringName]([&"pingguo", &"pingguo"])
@@ -128,7 +128,7 @@ spoken_vocab_ids = Array[StringName]([&"pingguo", &"pingguo"])
 [node name="CustomerB" parent="NPCs" instance=ExtResource("3")]
 position = Vector2(-200, 80)
 character_name = "阿明"
-identity = "客人"
+identity = "顧客"
 can_random_walk = false
 spoken_words = ["你好", "這是茶"]
 spoken_vocab_ids = Array[StringName]([&"nihao", &"cha"])
@@ -136,7 +136,7 @@ spoken_vocab_ids = Array[StringName]([&"nihao", &"cha"])
 [node name="CustomerC" parent="NPCs" instance=ExtResource("3")]
 position = Vector2(60, 80)
 character_name = "小雨"
-identity = "客人"
+identity = "顧客"
 can_random_walk = false
 spoken_words = ["你好", "這是水"]
 spoken_vocab_ids = Array[StringName]([&"nihao", &"shui"])

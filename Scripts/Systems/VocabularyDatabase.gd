@@ -53,13 +53,14 @@ func mark_learned(id: StringName, location: String = "") -> void:
 		if is_first_encounter:
 			vocabulary_first_seen.emit(id)
 
-func discover_words_in_text(text: String, location: String = "", exclude_id: StringName = &"") -> void:
-	for id in entries:
-		if id == exclude_id:
-			continue
-		var entry = entries[id]
-		if entry != null and not entry.chinese.is_empty() and entry.chinese in text:
-			mark_learned(id, location)
+func mark_seen_from_dialogue(id: StringName, location: String = "") -> void:
+	if not String(id).is_empty():
+		mark_learned(id, location)
+
+func discover_words_in_text(_text: String, _location: String = "", _exclude_id: StringName = &"") -> void:
+	# Prototype v0.1 intentionally avoids substring discovery.
+	# Words are only unlocked when a dialogue line explicitly marks its vocab id.
+	pass
 
 func get_audio_path(id: StringName) -> String:
 	var entry: Resource = get_entry(id)

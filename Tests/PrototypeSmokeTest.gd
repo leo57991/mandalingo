@@ -2,15 +2,10 @@ extends SceneTree
 
 const EXPECTED_VOCABULARY_IDS: Array[StringName] = [
 	&"cha",
-	&"ni",
 	&"nihao",
 	&"pingguo",
-	&"ren",
-	&"shei",
 	&"shi",
 	&"shui",
-	&"ta",
-	&"wo",
 	&"zhe",
 ]
 
@@ -58,6 +53,8 @@ func _validate_vocabulary() -> void:
 	)
 	for id in EXPECTED_VOCABULARY_IDS:
 		_expect(database.get_entry(id) != null, "Vocabulary exists: %s" % id)
+	for removed_id in [&"wo", &"ni", &"ta", &"ren", &"shei", &"women", &"nimen", &"tamen"]:
+		_expect(database.get_entry(removed_id) == null, "Removed vocabulary stays out: %s" % removed_id)
 
 func _validate_scene_structure(scene: Node2D) -> void:
 	var required_paths := [
