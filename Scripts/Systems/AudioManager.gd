@@ -9,7 +9,7 @@ func _ready() -> void:
 	voice_player.bus = "Master"
 	add_child(voice_player)
 
-func play_vocabulary(id: StringName, location: String = "", count_as_seen: bool = true) -> void:
+func play_vocabulary(id: StringName, location: String = "", count_as_seen: bool = false) -> void:
 	if count_as_seen:
 		VocabularyDatabase.mark_learned(id, location)
 	

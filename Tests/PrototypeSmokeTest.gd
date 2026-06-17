@@ -78,6 +78,8 @@ func _validate_scene_structure(scene: Node2D) -> void:
 			target.lines.size() == target.vocab_ids.size(),
 			"%s dialogue and vocabulary arrays align" % npc.name
 		)
+		for line_vocab_ids in target.vocab_ids:
+			_expect(line_vocab_ids is Array, "%s dialogue line can mark multiple vocabulary ids" % npc.name)
 
 	var counter_visual: Sprite2D = scene.get_node("Counter/CounterVisual")
 	_expect(counter_visual.texture != null, "Counter uses a transparent table texture")
@@ -162,6 +164,11 @@ func _validate_npc_dialogue(scene: Node2D) -> void:
 		seen_after_repeat == seen_before_repeat,
 		"Repeated interaction during dialogue is ignored"
 	)
+	var database: Node = root.get_node("VocabularyDatabase")
+	await create_timer(3.1).timeout
+	_expect(database.get_entry(&"zhe").seen_count > 0, "這 is explicitly discovered from 這是蘋果")
+	_expect(database.get_entry(&"shi").seen_count > 0, "是 is explicitly discovered from 這是蘋果")
+	_expect(database.get_entry(&"pingguo").seen_count > 0, "蘋果 is discovered from 這是蘋果")
 
 	var notebook: CanvasLayer = get_first_node_in_group("notebook_ui")
 	scene._on_notebook_button_pressed()

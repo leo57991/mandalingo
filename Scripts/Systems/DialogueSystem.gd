@@ -50,13 +50,28 @@ func hide_dialogue() -> void:
 
 func _show_current_line() -> void:
 	var text := String(active_lines[line_index])
-	var vocab_id := StringName()
-	if line_index < active_vocab_ids.size():
-		vocab_id = StringName(active_vocab_ids[line_index])
+	var line_vocab_ids := _get_line_vocab_ids(line_index)
+	var primary_vocab_id := _get_primary_vocab_id(line_vocab_ids)
 
 	if popup != null:
 		popup.show_chinese(text)
 
-	if not String(vocab_id).is_empty():
-		VocabularyDatabase.mark_seen_from_dialogue(vocab_id, active_location)
-		AudioManager.play_vocabulary(vocab_id, active_location)
+	VocabularyDatabase.mark_many_seen_from_dialogue(line_vocab_ids, active_location)
+	if not String(primary_vocab_id).is_empty():
+		AudioManager.play_vocabulary(primary_vocab_id, active_location)
+
+func _get_line_vocab_ids(index: int) -> Array:
+	if index >= active_vocab_ids.size():
+		return []
+
+	var raw_ids = active_vocab_ids[index]
+	if raw_ids is Array:
+		return raw_ids
+	if String(raw_ids).is_empty():
+		return []
+	return [StringName(raw_ids)]
+
+func _get_primary_vocab_id(ids: Array) -> StringName:
+	if ids.is_empty():
+		return &""
+	return StringName(ids[ids.size() - 1])

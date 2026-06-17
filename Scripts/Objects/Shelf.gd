@@ -58,4 +58,4 @@ func refresh_context() -> void:
 		
 	interaction_target.display_name = shelf_name
 	if interaction_target.has_method("set_dialogue") and not word.is_empty():
-		interaction_target.set_dialogue([word, word], [object_vocab_id, object_vocab_id])
+		interaction_target.set_dialogue([word, word], [[object_vocab_id], [object_vocab_id]])

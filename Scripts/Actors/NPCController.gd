@@ -77,12 +77,11 @@ func say(lines: Array, vocab_ids: Array = []) -> void:
 	is_speaking = true
 	behavior_state = BehaviorState.SPEAKING
 	for i in lines.size():
-		var vocab_id := StringName()
-		if i < vocab_ids.size():
-			vocab_id = StringName(vocab_ids[i])
-		display_word(String(lines[i]), vocab_id)
-		if not String(vocab_id).is_empty():
-			AudioManager.play_vocabulary(vocab_id, character_name)
+		var line_vocab_ids := _get_line_vocab_ids(vocab_ids, i)
+		var primary_vocab_id := _get_primary_vocab_id(line_vocab_ids)
+		display_word(String(lines[i]), line_vocab_ids)
+		if not String(primary_vocab_id).is_empty():
+			AudioManager.play_vocabulary(primary_vocab_id, character_name)
 		await get_tree().create_timer(speech_delay).timeout
 	is_speaking = false
 	behavior_state = BehaviorState.IDLE
@@ -103,12 +102,29 @@ func set_profile(npc_name: String, npc_identity: String, random_walk: bool, word
 	if is_node_ready():
 		_refresh_labels()
 
-func display_word(word: String, vocab_id: StringName = &"") -> void:
+func display_word(word: String, vocab_ids: Variant = []) -> void:
 	speech_label.text = word
 	_position_speech_bubble()
 	speech_bubble.show()
 	speech_timer.start(max(1.5, speech_delay - 0.5))
-	VocabularyDatabase.mark_seen_from_dialogue(vocab_id, character_name)
+	VocabularyDatabase.mark_many_seen_from_dialogue(_normalize_vocab_ids(vocab_ids), character_name)
+
+func _get_line_vocab_ids(all_vocab_ids: Array, index: int) -> Array:
+	if index >= all_vocab_ids.size():
+		return []
+	return _normalize_vocab_ids(all_vocab_ids[index])
+
+func _normalize_vocab_ids(raw_ids: Variant) -> Array:
+	if raw_ids is Array:
+		return raw_ids
+	if String(raw_ids).is_empty():
+		return []
+	return [StringName(raw_ids)]
+
+func _get_primary_vocab_id(ids: Array) -> StringName:
+	if ids.is_empty():
+		return &""
+	return StringName(ids[ids.size() - 1])
 
 func _position_speech_bubble() -> void:
 	var canvas_transform := get_global_transform_with_canvas()

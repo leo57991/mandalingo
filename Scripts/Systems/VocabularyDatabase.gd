@@ -57,6 +57,10 @@ func mark_seen_from_dialogue(id: StringName, location: String = "") -> void:
 	if not String(id).is_empty():
 		mark_learned(id, location)
 
+func mark_many_seen_from_dialogue(ids: Array, location: String = "") -> void:
+	for id in ids:
+		mark_seen_from_dialogue(StringName(id), location)
+
 func discover_words_in_text(_text: String, _location: String = "", _exclude_id: StringName = &"") -> void:
 	# Prototype v0.1 intentionally avoids substring discovery.
 	# Words are only unlocked when a dialogue line explicitly marks its vocab id.

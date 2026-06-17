@@ -55,13 +55,19 @@ func record_event(event_name: String, properties: Dictionary = {}) -> void:
 
 func track_interaction(target_name: String, target_kind: String, vocab_ids: Array) -> void:
 	var ids: Array[String] = []
-	for vocab_id in vocab_ids:
-		ids.append(String(vocab_id))
+	_collect_vocab_ids(vocab_ids, ids)
 	record_event("interaction", {
 		"target": target_name,
 		"target_kind": target_kind,
 		"vocab_ids": ids,
 	})
+
+func _collect_vocab_ids(raw_ids: Array, output: Array[String]) -> void:
+	for vocab_id in raw_ids:
+		if vocab_id is Array:
+			_collect_vocab_ids(vocab_id, output)
+		elif not String(vocab_id).is_empty():
+			output.append(String(vocab_id))
 
 func track_vocabulary_seen(vocab_id: StringName, seen_count: int, location: String) -> void:
 	record_event("vocabulary_seen", {
