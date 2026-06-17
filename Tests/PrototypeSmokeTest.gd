@@ -88,6 +88,10 @@ func _validate_scene_structure(scene: Node2D) -> void:
 		counter_size.is_equal_approx(Vector2(120, 250)),
 		"Counter keeps the original long rectangular footprint"
 	)
+	for item_name in ["CounterApple", "CounterTea", "CounterWater"]:
+		var counter_item: Sprite2D = scene.get_node("Counter/CounterItems/%s" % item_name)
+		_expect(counter_item.texture != null, "Counter displays %s" % item_name)
+		_expect(counter_item.z_index > counter_visual.z_index, "%s renders above the counter" % item_name)
 
 	for shelf_path in [
 		"Shelves/ShelfApples",

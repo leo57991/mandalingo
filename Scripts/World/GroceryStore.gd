@@ -6,6 +6,7 @@ const TEA_ITEM_TEXTURE := preload("res://Assets/Sprites/Items/tea_pixel.png")
 const WATER_ITEM_TEXTURE := preload("res://Assets/Sprites/Items/water_pixel.png")
 const SHOP_OWNER_INTERACTION_SIZE := Vector2(156, 110)
 const SHOP_OWNER_INTERACTION_OFFSET := Vector2(-58, 0)
+const COUNTER_ITEM_SCALE := Vector2(0.7, 0.7)
 
 var _notebook_button: Button
 var _notebook_attention_tween: Tween
@@ -30,6 +31,7 @@ func _ready() -> void:
 	var counter_sprite = get_node_or_null("Counter/CounterVisual")
 	if counter_sprite is Sprite2D:
 		counter_sprite.texture = COUNTER_TEXTURE
+	_configure_counter_items()
 
 	_configure_shelves()
 	_configure_npcs()
@@ -60,6 +62,34 @@ func _configure_shelves() -> void:
 					shelf.item_texture = WATER_ITEM_TEXTURE
 		if shelf.has_method("refresh_context"):
 			shelf.refresh_context()
+
+func _configure_counter_items() -> void:
+	var counter := get_node_or_null("Counter")
+	if counter == null:
+		return
+
+	var item_holder := counter.get_node_or_null("CounterItems")
+	if item_holder == null:
+		item_holder = Node2D.new()
+		item_holder.name = "CounterItems"
+		counter.add_child(item_holder)
+
+	_add_counter_item(item_holder, "CounterApple", APPLE_ITEM_TEXTURE, Vector2(-20, -72))
+	_add_counter_item(item_holder, "CounterTea", TEA_ITEM_TEXTURE, Vector2(-20, 0))
+	_add_counter_item(item_holder, "CounterWater", WATER_ITEM_TEXTURE, Vector2(-20, 72))
+
+func _add_counter_item(parent: Node, item_name: String, texture: Texture2D, local_position: Vector2) -> void:
+	var item_sprite := parent.get_node_or_null(item_name) as Sprite2D
+	if item_sprite == null:
+		item_sprite = Sprite2D.new()
+		item_sprite.name = item_name
+		parent.add_child(item_sprite)
+
+	item_sprite.texture = texture
+	item_sprite.position = local_position
+	item_sprite.scale = COUNTER_ITEM_SCALE
+	item_sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	item_sprite.z_index = 2
 
 func _configure_npcs() -> void:
 	# Set NPC starting positions
