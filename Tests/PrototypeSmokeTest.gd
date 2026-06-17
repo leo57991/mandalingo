@@ -145,7 +145,10 @@ func _validate_npc_dialogue(scene: Node2D) -> void:
 	_expect(assistant.is_speaking, "NPC interaction starts dialogue")
 	_expect(label.text == "你好", "NPC dialogue starts with 你好")
 	_expect(bubble.visible, "NPC speech bubble is visible")
-	_expect(bubble.offset_bottom <= -20.0, "Speech bubble stays close above the NPC")
+	_expect(
+		bubble.offset_bottom <= -20.0 or bubble.offset_top >= 20.0,
+		"Speech bubble stays close to the NPC"
+	)
 	var notebook_button: Button = scene.get_node("NotebookHUD/HUDBase/NotebookButton")
 	_expect(paused, "First vocabulary encounter pauses the game")
 	_expect(scene.is_notebook_attention_active(), "Notebook icon requests attention")

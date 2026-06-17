@@ -1,6 +1,7 @@
 # Godot-specific ignores
 .godot/
 *.translation
+*.log
 
 # Imported translations (if not stored within the project)
 *.csv.import
