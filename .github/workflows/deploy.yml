@@ -17,7 +17,7 @@ permissions:
 jobs:
   deploy:
     environment:
-      name: github-pages
+      name: github-pages-2-5d
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     container:
