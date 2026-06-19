@@ -17,3 +17,7 @@ This branch tests whether a fixed-angle 3D space strengthens contextual Mandarin
 Can a beginner connect `蘋果` to the visible apples and voluntarily repeat the interaction without translation, pinyin, or a quiz?
 
 This slice intentionally excludes additional shelves, NPC movement, combat, progression, and new vocabulary.
+
+## Web Deployment
+
+GitHub Pages deploys from the `experiment/2.5d-grocery-store` branch so the public prototype follows the 2.5D experiment without replacing the finalized 2D baseline on `main`.
