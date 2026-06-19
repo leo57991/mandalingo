@@ -9,11 +9,11 @@
 background_mode = 1
 background_color = Color(0.125, 0.153, 0.176, 1)
 ambient_light_source = 3
-ambient_light_color = Color(0.78, 0.84, 0.88, 1)
-ambient_light_energy = 0.7
+ambient_light_color = Color(0.68, 0.74, 0.78, 1)
+ambient_light_energy = 0.45
 
 [sub_resource type="StandardMaterial3D" id="Material_floor"]
-albedo_color = Color(0.73, 0.76, 0.69, 1)
+albedo_color = Color(0.48, 0.52, 0.46, 1)
 roughness = 0.9
 
 [sub_resource type="BoxMesh" id="Mesh_floor"]
@@ -24,7 +24,7 @@ size = Vector3(16, 0.2, 12)
 size = Vector3(16, 0.2, 12)
 
 [sub_resource type="StandardMaterial3D" id="Material_wall"]
-albedo_color = Color(0.84, 0.84, 0.8, 1)
+albedo_color = Color(0.66, 0.68, 0.64, 1)
 roughness = 0.85
 
 [sub_resource type="BoxMesh" id="Mesh_back_wall"]
@@ -98,8 +98,10 @@ environment = SubResource("Environment_store")
 
 [node name="Sun" type="DirectionalLight3D" parent="."]
 rotation_degrees = Vector3(-55, -35, 0)
-light_energy = 1.1
+light_energy = 0.72
+light_angular_distance = 0.8
 shadow_enabled = true
+shadow_blur = 1.4
 
 [node name="Store" type="Node3D" parent="."]
 
@@ -136,15 +138,12 @@ mesh = SubResource("Mesh_side_wall")
 [node name="Collision" type="CollisionShape3D" parent="Store/LeftWall"]
 shape = SubResource("Shape_side_wall")
 
-[node name="RightWall" type="StaticBody3D" parent="Store"]
+[node name="RightBoundary" type="StaticBody3D" parent="Store"]
 position = Vector3(8, 1.75, 0)
 collision_layer = 4
 collision_mask = 0
 
-[node name="Mesh" type="MeshInstance3D" parent="Store/RightWall"]
-mesh = SubResource("Mesh_side_wall")
-
-[node name="Collision" type="CollisionShape3D" parent="Store/RightWall"]
+[node name="Collision" type="CollisionShape3D" parent="Store/RightBoundary"]
 shape = SubResource("Shape_side_wall")
 
 [node name="AppleShelf" type="StaticBody3D" parent="Store"]

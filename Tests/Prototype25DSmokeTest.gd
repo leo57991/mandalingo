@@ -23,6 +23,7 @@ func _run() -> void:
 	var shelf_target := shelf.get_node("InteractionTarget") as Area3D
 	var npc := scene.get_node("Assistant") as StaticBody3D
 	var npc_target := npc.get_node("InteractionTarget") as Area3D
+	var right_boundary := scene.get_node("Store/RightBoundary") as StaticBody3D
 
 	_expect(scene.get_node("Camera3D") is Camera3D, "Orthographic camera exists")
 	_expect(scene.get_node("Camera3D").projection == Camera3D.PROJECTION_ORTHOGONAL, "Camera uses orthographic projection")
@@ -30,6 +31,8 @@ func _run() -> void:
 	_expect(shelf.collision_layer == 4, "Apple shelf blocks the player")
 	_expect(shelf_target.collision_layer == 8, "Apple shelf exposes an interaction area")
 	_expect(npc.collision_layer == 4, "NPC is immovable world geometry")
+	_expect(right_boundary != null, "Invisible right boundary keeps the player inside")
+	_expect(not right_boundary.has_node("Mesh"), "Foreground right wall no longer blocks the view")
 
 	player.global_position = Vector3(0, 0.8, 1.0)
 	await physics_frame
