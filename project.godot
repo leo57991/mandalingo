@@ -22,6 +22,7 @@ config/icon="res://icon.svg"
 
 [autoload]
 
+DataManager="*res://Scripts/Systems/DataManager.gd"
 TelemetryManager="*res://Scripts/Systems/TelemetryManager.gd"
 VocabularyDatabase="*res://Scripts/Systems/VocabularyDatabase.gd"
 AudioManager="*res://Scripts/Systems/AudioManager.gd"

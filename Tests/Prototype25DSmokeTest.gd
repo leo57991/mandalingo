@@ -1,5 +1,7 @@
 extends SceneTree
 
+const TEST_EVENT_QUEUE := "user://prototype_25d_smoke_player_events.json"
+
 var failures: Array[String] = []
 
 func _initialize() -> void:
@@ -7,6 +9,9 @@ func _initialize() -> void:
 
 func _run() -> void:
 	root.get_node("TelemetryManager").consent_state = "declined"
+	var data_manager: Node = root.get_node("DataManager")
+	data_manager.queue_file_path = TEST_EVENT_QUEUE
+	data_manager.event_queue.clear()
 	var packed_scene := load("res://Scenes/World/GroceryStore25D.tscn") as PackedScene
 	_expect(packed_scene != null, "2.5D scene loads")
 	if packed_scene == null:
@@ -81,6 +86,8 @@ func _expect(condition: bool, description: String) -> void:
 		push_error("FAIL: %s" % description)
 
 func _finish() -> void:
+	if FileAccess.file_exists(TEST_EVENT_QUEUE):
+		DirAccess.remove_absolute(ProjectSettings.globalize_path(TEST_EVENT_QUEUE))
 	if failures.is_empty():
 		print("2.5D prototype smoke test passed.")
 		quit(0)

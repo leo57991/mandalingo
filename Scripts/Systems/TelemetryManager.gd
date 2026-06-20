@@ -16,7 +16,7 @@ var _session_started := false
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
-	session_id = _create_session_id()
+	session_id = DataManager.session_id if not DataManager.session_id.is_empty() else _create_session_id()
 	session_started_at_msec = Time.get_ticks_msec()
 	consent_state = _load_consent()
 	if is_configured() and consent_state == CONSENT_ACCEPTED:

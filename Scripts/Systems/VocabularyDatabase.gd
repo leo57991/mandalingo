@@ -49,7 +49,7 @@ func mark_learned(id: StringName, location: String = "") -> void:
 		entry.seen_count += 1
 		if not location.is_empty():
 			entry.last_seen = location
-		TelemetryManager.track_vocabulary_seen(id, entry.seen_count, entry.last_seen)
+		DataManager.track_vocabulary_seen(id, entry.seen_count, entry.last_seen)
 		if is_first_encounter:
 			vocabulary_first_seen.emit(id)
 
