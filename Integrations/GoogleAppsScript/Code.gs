@@ -23,6 +23,9 @@ const ALLOWED_EVENTS = new Set([
   'vocabulary_seen',
   'notebook_opened',
   'guess_updated',
+  'rune_judgement',
+  'rune_spell_success',
+  'tocfl_level_unlocked',
 ]);
 
 function doGet() {
