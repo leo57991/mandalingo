@@ -79,7 +79,7 @@ func _status_text(pattern: SpellPattern) -> String:
 func _is_level_locked(pattern: SpellPattern) -> bool:
 	if _progression_manager == null:
 		return true
-	var required_index := TocflProgressionManager.LEVEL_ORDER.find(pattern.required_tocfl_level)
+	var required_index := TocflProgressionManager.LEVEL_ORDER.find(pattern.tocfl_level)
 	var current_index := TocflProgressionManager.LEVEL_ORDER.find(_progression_manager.current_level)
 	return required_index < 0 or current_index < 0 or required_index > current_index
 

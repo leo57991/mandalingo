@@ -4,7 +4,7 @@ class_name SpellPattern
 @export var spell_id: StringName
 @export var spell_name_chinese: String
 @export var spell_name_english: String
-@export_enum("Prep1", "Prep2", "A1", "A2", "B1", "B2", "C1", "C2") var required_tocfl_level: String = "Prep1"
+@export_enum("Prep1", "Prep2", "A1", "A2", "B1", "B2", "C1", "C2") var tocfl_level: String = "Prep1"
 @export var slot_pattern: Array[StringName] = []
 @export var slot_fillers: Dictionary = {}
 

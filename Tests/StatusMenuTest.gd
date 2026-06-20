@@ -64,7 +64,7 @@ func _run() -> void:
 	var locked_pattern := SpellPattern.new()
 	locked_pattern.spell_id = &"locked_test_spell"
 	locked_pattern.spell_name_chinese = "封印術"
-	locked_pattern.required_tocfl_level = "A1"
+	locked_pattern.tocfl_level = "A1"
 	spells_tab.spell_patterns.append(locked_pattern)
 	spells_tab.refresh()
 	var locked_button := spells_tab.get_spell_button(&"locked_test_spell")

@@ -59,6 +59,6 @@ func _check_level_up() -> bool:
 func _get_spell_ids_for_level(level: String) -> Array[StringName]:
 	var result: Array[StringName] = []
 	for pattern in spell_patterns:
-		if pattern != null and pattern.required_tocfl_level == level and not result.has(pattern.spell_id):
+		if pattern != null and pattern.tocfl_level == level and not result.has(pattern.spell_id):
 			result.append(pattern.spell_id)
 	return result
