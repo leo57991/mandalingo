@@ -22,7 +22,7 @@ func is_spell_mastered(spell_id: StringName) -> bool:
 	return _mastered_spell_ids.has(spell_id)
 
 func get_level_progress(level: String = current_level) -> float:
-	var level_spell_ids := _get_spell_ids_for_level(level)
+	var level_spell_ids := get_spell_ids_for_level(level)
 	if level_spell_ids.is_empty():
 		return 0.0
 	var mastered_count := 0
@@ -42,18 +42,16 @@ func _check_level_up() -> bool:
 	level_unlocked.emit(current_level)
 	var data_manager := get_node_or_null("/root/DataManager")
 	if data_manager != null:
-		data_manager.record_player_event("tocfl_level_unlocked", {
-			"context": {"previous_level": previous_level},
-			"details": {
-				"level": current_level,
-				"threshold": LEVEL_UP_THRESHOLD,
-			},
-		})
+		data_manager.track_tocfl_level_unlocked(
+			previous_level,
+			current_level,
+			LEVEL_UP_THRESHOLD
+		)
 	else:
 		push_warning("TocflProgressionManager could not record the level unlock because DataManager is unavailable.")
 	return true
 
-func _get_spell_ids_for_level(level: String) -> Array[StringName]:
+func get_spell_ids_for_level(level: String) -> Array[StringName]:
 	var result: Array[StringName] = []
 	for pattern in spell_patterns:
 		if pattern != null and pattern.tocfl_level == level and not result.has(pattern.spell_id):

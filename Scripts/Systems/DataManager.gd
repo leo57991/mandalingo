@@ -81,6 +81,58 @@ func track_guess_updated(
 		"context": context,
 	})
 
+func track_rune_judgement(
+	vocab_id: StringName,
+	sequence: Array[StringName],
+	success: bool,
+	confidence: float,
+	location: String = "",
+	context: Dictionary = {}
+) -> Dictionary:
+	return record_player_event("rune_judgement", {
+		"vocab_id": String(vocab_id),
+		"location": location,
+		"context": context,
+		"details": {
+			"sequence": _string_names_to_strings(sequence),
+			"success": success,
+			"confidence": confidence,
+			"location": location,
+		},
+	})
+
+func track_rune_spell_success(
+	vocab_id: StringName,
+	sequence: Array[StringName],
+	confidence: float,
+	location: String = "",
+	context: Dictionary = {}
+) -> Dictionary:
+	return record_player_event("rune_spell_success", {
+		"vocab_id": String(vocab_id),
+		"location": location,
+		"context": context,
+		"details": {
+			"sequence": _string_names_to_strings(sequence),
+			"confidence": confidence,
+			"location": location,
+		},
+	})
+
+func track_tocfl_level_unlocked(
+	previous_level: String,
+	new_level: String,
+	threshold: float
+) -> Dictionary:
+	return record_player_event("tocfl_level_unlocked", {
+		"context": {"previous_level": previous_level},
+		"details": {
+			"previous_level": previous_level,
+			"level": new_level,
+			"threshold": threshold,
+		},
+	})
+
 func load_queue() -> void:
 	event_queue.clear()
 	if not FileAccess.file_exists(queue_file_path):
@@ -202,6 +254,12 @@ func _collect_vocab_ids(raw_ids: Array, output: Array[String]) -> void:
 			_collect_vocab_ids(vocab_id, output)
 		elif not String(vocab_id).is_empty():
 			output.append(String(vocab_id))
+
+func _string_names_to_strings(values: Array[StringName]) -> Array[String]:
+	var result: Array[String] = []
+	for value in values:
+		result.append(String(value))
+	return result
 
 func _create_session_id() -> String:
 	return "%s-%08x-%08x" % [

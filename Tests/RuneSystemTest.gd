@@ -56,22 +56,63 @@ func _run() -> void:
 	_expect(visited_states.has(RuneStateMachine.State.JUDGING), "State machine enters judging")
 	_expect(visited_states.has(RuneStateMachine.State.SUCCESS), "State machine exposes success")
 
+	var prep1_tea := load("res://Data/Spells/prep1_identify_tea.tres") as SpellPattern
+	var prep1_water := load("res://Data/Spells/prep1_identify_water.tres") as SpellPattern
+	var prep2_greeting := load("res://Data/Spells/prep2_greeting.tres") as SpellPattern
+	_expect(
+		prep1_tea != null and prep1_tea.is_valid_pattern()
+		and prep1_water != null and prep1_water.is_valid_pattern()
+		and prep2_greeting != null and prep2_greeting.is_valid_pattern(),
+		"Multi-level spell resources load and validate"
+	)
+
 	var progression := TocflProgressionManager.new()
-	progression.spell_patterns = [pattern]
+	progression.spell_patterns = [prep1_tea, prep1_water, prep2_greeting]
 	root.add_child(progression)
 	var unlocked_levels: Array[String] = []
 	progression.level_unlocked.connect(func(level: String) -> void: unlocked_levels.append(level))
-	_expect(progression.record_spell_success(&"identify_apple"), "Mastering enough Prep1 spells unlocks the next level")
+	_expect(
+		not progression.record_spell_success(&"prep1_identify_tea"),
+		"Mastering one of two Prep1 spells does not unlock the next level"
+	)
+	_expect(
+		is_equal_approx(progression.get_level_progress("Prep1"), 0.5),
+		"One of two mastered Prep1 spells reports 0.5 progress"
+	)
+	_expect(
+		progression.record_spell_success(&"prep1_identify_water"),
+		"Mastering both Prep1 spells triggers a level unlock"
+	)
 	_expect(progression.current_level == "Prep2", "TOCFL progression advances in level order")
 	_expect(unlocked_levels == ["Prep2"], "TOCFL progression emits the unlocked level")
-	_expect(not progression.record_spell_success(&"identify_apple"), "Duplicate spell mastery is ignored")
+	var prep2_spell_ids := progression.get_spell_ids_for_level("Prep2")
+	var expected_prep2_spell_ids: Array[StringName] = [&"prep2_greeting"]
+	_expect(
+		prep2_spell_ids == expected_prep2_spell_ids,
+		"The public level query returns the next-level spell pool"
+	)
+	_expect(
+		not progression.record_spell_success(&"prep1_identify_tea"),
+		"Duplicate spell mastery is ignored"
+	)
 
 	var event_names: Array[String] = []
+	var judgement_event: Dictionary = {}
 	for event in data_manager.event_queue:
-		event_names.append(String(event.get("event_name", "")))
+		var event_name := String(event.get("event_name", ""))
+		event_names.append(event_name)
+		if event_name == "rune_judgement":
+			judgement_event = event
 	_expect(event_names.has("rune_judgement"), "Rune attempts are recorded through DataManager")
 	_expect(event_names.has("rune_spell_success"), "Successful spells are recorded through DataManager")
 	_expect(event_names.has("tocfl_level_unlocked"), "TOCFL unlocks are recorded through DataManager")
+	_expect(
+		judgement_event.get("location", "") == "grocery_store_25d"
+		and judgement_event.get("context", {}).get("location", "") == "grocery_store_25d"
+		and judgement_event.get("details", {}).get("sequence", []) == ["zhe", "shi", "pingguo"]
+		and judgement_event.get("details", {}).get("success", false),
+		"DataManager preserves rune judgement details, context, and location"
+	)
 
 	machine.queue_free()
 	progression.queue_free()

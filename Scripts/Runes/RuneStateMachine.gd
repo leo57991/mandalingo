@@ -45,28 +45,23 @@ func _record_judgement(sequence: Array[StringName], result: RuneJudgeResult) -> 
 	if data_manager == null:
 		push_warning("RuneStateMachine could not record events because DataManager is unavailable.")
 		return
-	var serialized_sequence: Array[String] = []
-	for value in sequence:
-		serialized_sequence.append(String(value))
-	var details := {
-		"sequence": serialized_sequence,
-		"success": result.success,
-		"result_id": String(result.result_id),
-		"confidence": result.confidence,
-	}
-	data_manager.record_player_event("rune_judgement", {
-		"vocab_id": String(result.result_id),
-		"location": String(current_context.get("location", "")),
-		"context": current_context,
-		"details": details,
-	})
+	var location := String(current_context.get("location", ""))
+	data_manager.track_rune_judgement(
+		result.result_id,
+		sequence,
+		result.success,
+		result.confidence,
+		location,
+		current_context
+	)
 	if result.success:
-		data_manager.record_player_event("rune_spell_success", {
-			"vocab_id": String(result.result_id),
-			"location": String(current_context.get("location", "")),
-			"context": current_context,
-			"details": details,
-		})
+		data_manager.track_rune_spell_success(
+			result.result_id,
+			sequence,
+			result.confidence,
+			location,
+			current_context
+		)
 
 func _reset() -> void:
 	current_judge = null

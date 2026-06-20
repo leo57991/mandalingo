@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="SpellPattern" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://Scripts/Resources/SpellPattern.gd" id="1_spell"]
+
+[resource]
+script = ExtResource("1_spell")
+spell_id = &"prep2_greeting"
+spell_name_chinese = "問候術"
+spell_name_english = "Greeting"
+tocfl_level = "Prep2"
+slot_pattern = Array[StringName]([&"GREETING"])
+slot_fillers = {
+&"GREETING": Array[StringName]([&"nihao"])
+}
