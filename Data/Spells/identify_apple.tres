@@ -7,7 +7,7 @@ script = ExtResource("1_spell")
 spell_id = &"identify_apple"
 spell_name_chinese = "顯形·蘋果"
 spell_name_english = "Identify Apple"
-tocfl_level = "Prep1"
+required_tocfl_level = "Prep1"
 slot_pattern = Array[StringName]([&"DEMONSTRATIVE", &"COPULA", &"TARGET"])
 slot_fillers = {
 &"COPULA": Array[StringName]([&"shi"]),

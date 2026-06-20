@@ -12,6 +12,9 @@ const LEVEL_UP_THRESHOLD := 0.6
 var current_level := "Prep1"
 var _mastered_spell_ids: Array[StringName] = []
 
+func _ready() -> void:
+	add_to_group("tocfl_progression_manager")
+
 func record_spell_success(spell_id: StringName) -> bool:
 	if spell_id.is_empty() or _mastered_spell_ids.has(spell_id):
 		return false
@@ -56,6 +59,6 @@ func _check_level_up() -> bool:
 func _get_spell_ids_for_level(level: String) -> Array[StringName]:
 	var result: Array[StringName] = []
 	for pattern in spell_patterns:
-		if pattern != null and pattern.tocfl_level == level and not result.has(pattern.spell_id):
+		if pattern != null and pattern.required_tocfl_level == level and not result.has(pattern.spell_id):
 			result.append(pattern.spell_id)
 	return result
