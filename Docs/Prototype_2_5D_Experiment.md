@@ -18,6 +18,16 @@ Can a beginner connect `蘋果` to the visible apples and voluntarily repeat the
 
 This slice intentionally excludes additional shelves, NPC movement, combat, progression, and new vocabulary.
 
+## HD-2D Visual Trial
+
+The current presentation trial uses an original HD-2D-inspired treatment without copying commercial game assets:
+
+- Pixel-art characters stand inside the orthographic 3D store as billboarded `Sprite3D` nodes.
+- Nearest-neighbor texture filtering preserves deliberate pixel edges.
+- A checker-tile floor, low-poly apples, hard shadows, warm focal lighting, and light distance fog give the room a staged diorama quality.
+- NPC identity labels and Chinese speech remain fixed-size and legible instead of being reduced to the world's pixel scale.
+- The visual treatment must keep vocabulary objects immediately recognizable; atmosphere is secondary to contextual inference.
+
 ## Web Deployment
 
 GitHub Pages deploys from the `experiment/2.5d-grocery-store` branch so the public prototype follows the 2.5D experiment without replacing the finalized 2D baseline on `main`.

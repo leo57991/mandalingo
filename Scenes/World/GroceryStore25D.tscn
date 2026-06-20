@@ -4,17 +4,26 @@
 [ext_resource type="Script" path="res://Scripts/Actors/PlayerController3D.gd" id="2_player"]
 [ext_resource type="Script" path="res://Scripts/Actors/NPCController3D.gd" id="3_npc"]
 [ext_resource type="Script" path="res://Scripts/Systems/InteractionTarget3D.gd" id="4_interaction"]
+[ext_resource type="Texture2D" path="res://Assets/Sprites/HD2D/player_hd2d.png" id="5_player_sprite"]
+[ext_resource type="Texture2D" path="res://Assets/Sprites/HD2D/assistant_hd2d.png" id="6_assistant_sprite"]
 
 [sub_resource type="Environment" id="Environment_store"]
 background_mode = 1
 background_color = Color(0.125, 0.153, 0.176, 1)
 ambient_light_source = 3
-ambient_light_color = Color(0.68, 0.74, 0.78, 1)
-ambient_light_energy = 0.45
+ambient_light_color = Color(0.5, 0.55, 0.6, 1)
+ambient_light_energy = 0.48
+fog_enabled = true
+fog_light_color = Color(0.24, 0.28, 0.31, 1)
+fog_light_energy = 0.45
+fog_density = 0.006
+fog_sky_affect = 0.2
 
-[sub_resource type="StandardMaterial3D" id="Material_floor"]
-albedo_color = Color(0.48, 0.52, 0.46, 1)
-roughness = 0.9
+[sub_resource type="Shader" id="Shader_pixel_floor"]
+code = "shader_type spatial;\nrender_mode diffuse_lambert, specular_disabled;\n\nuniform vec4 tile_light : source_color = vec4(0.43, 0.47, 0.39, 1.0);\nuniform vec4 tile_dark : source_color = vec4(0.34, 0.38, 0.32, 1.0);\n\nvoid fragment() {\n\tvec2 tile = floor(UV * vec2(16.0, 12.0));\n\tfloat checker = mod(tile.x + tile.y, 2.0);\n\tALBEDO = mix(tile_light.rgb, tile_dark.rgb, checker);\n\tROUGHNESS = 1.0;\n}\n"
+
+[sub_resource type="ShaderMaterial" id="Material_floor"]
+shader = SubResource("Shader_pixel_floor")
 
 [sub_resource type="BoxMesh" id="Mesh_floor"]
 material = SubResource("Material_floor")
@@ -60,6 +69,8 @@ roughness = 0.55
 material = SubResource("Material_apple")
 radius = 0.28
 height = 0.52
+radial_segments = 8
+rings = 4
 
 [sub_resource type="SphereShape3D" id="Shape_interaction"]
 radius = 2.2
@@ -68,25 +79,7 @@ radius = 2.2
 radius = 0.38
 height = 1.6
 
-[sub_resource type="StandardMaterial3D" id="Material_player"]
-albedo_color = Color(0.1, 0.42, 0.82, 1)
-roughness = 0.65
-
-[sub_resource type="CapsuleMesh" id="Mesh_player"]
-material = SubResource("Material_player")
-radius = 0.38
-height = 1.6
-
 [sub_resource type="CapsuleShape3D" id="Shape_npc"]
-radius = 0.42
-height = 1.7
-
-[sub_resource type="StandardMaterial3D" id="Material_npc"]
-albedo_color = Color(0.91, 0.57, 0.14, 1)
-roughness = 0.65
-
-[sub_resource type="CapsuleMesh" id="Mesh_npc"]
-material = SubResource("Material_npc")
 radius = 0.42
 height = 1.7
 
@@ -98,10 +91,18 @@ environment = SubResource("Environment_store")
 
 [node name="Sun" type="DirectionalLight3D" parent="."]
 rotation_degrees = Vector3(-55, -35, 0)
-light_energy = 0.72
-light_angular_distance = 0.8
+light_energy = 0.9
+light_color = Color(1, 0.84, 0.64, 1)
+light_angular_distance = 0.15
 shadow_enabled = true
-shadow_blur = 1.4
+shadow_blur = 0.35
+
+[node name="AppleFillLight" type="OmniLight3D" parent="."]
+position = Vector3(0, 3.8, 1.5)
+light_color = Color(1, 0.48, 0.22, 1)
+light_energy = 1.7
+omni_range = 7.5
+shadow_enabled = false
 
 [node name="Store" type="Node3D" parent="."]
 
@@ -187,18 +188,25 @@ collision_layer = 4
 collision_mask = 0
 script = ExtResource("3_npc")
 
-[node name="Mesh" type="MeshInstance3D" parent="Assistant"]
-mesh = SubResource("Mesh_npc")
+[node name="PixelSprite" type="Sprite3D" parent="Assistant"]
+position = Vector3(0, 0.18, 0)
+texture_filter = 0
+texture = ExtResource("6_assistant_sprite")
+pixel_size = 0.0032
+billboard = 1
+shaded = false
+alpha_cut = 1
 
 [node name="Collision" type="CollisionShape3D" parent="Assistant"]
 shape = SubResource("Shape_npc")
 
 [node name="Profile" type="Label3D" parent="Assistant"]
-position = Vector3(0, 1.45, 0)
+position = Vector3(0, 1.9, 0)
 text = "小安\n店員"
-font_size = 36
-outline_size = 8
+font_size = 14
+outline_size = 4
 billboard = 1
+fixed_size = true
 no_depth_test = true
 
 [node name="SpeechBubble" type="Node3D" parent="Assistant"]
@@ -210,9 +218,10 @@ unique_name_in_owner = true
 modulate = Color(0.08, 0.08, 0.08, 1)
 outline_modulate = Color(1, 1, 1, 1)
 text = "蘋果"
-font_size = 64
-outline_size = 18
+font_size = 24
+outline_size = 8
 billboard = 1
+fixed_size = true
 no_depth_test = true
 render_priority = 2
 
@@ -233,8 +242,14 @@ collision_layer = 1
 collision_mask = 4
 script = ExtResource("2_player")
 
-[node name="Mesh" type="MeshInstance3D" parent="Player"]
-mesh = SubResource("Mesh_player")
+[node name="PixelSprite" type="Sprite3D" parent="Player"]
+position = Vector3(0, 0.18, 0)
+texture_filter = 0
+texture = ExtResource("5_player_sprite")
+pixel_size = 0.0032
+billboard = 1
+shaded = false
+alpha_cut = 1
 
 [node name="Collision" type="CollisionShape3D" parent="Player"]
 shape = SubResource("Shape_player")
