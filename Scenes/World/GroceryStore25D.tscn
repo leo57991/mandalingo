@@ -1,4 +1,4 @@
-[gd_scene load_steps=24 format=3]
+[gd_scene load_steps=25 format=3]
 
 [ext_resource type="Script" path="res://Scripts/World/GroceryStore25D.gd" id="1_world"]
 [ext_resource type="Script" path="res://Scripts/Actors/PlayerController3D.gd" id="2_player"]
@@ -6,6 +6,7 @@
 [ext_resource type="Script" path="res://Scripts/Systems/InteractionTarget3D.gd" id="4_interaction"]
 [ext_resource type="Texture2D" path="res://Assets/Sprites/HD2D/player_hd2d.png" id="5_player_sprite"]
 [ext_resource type="Texture2D" path="res://Assets/Sprites/HD2D/assistant_hd2d.png" id="6_assistant_sprite"]
+[ext_resource type="Script" path="res://Scripts/Systems/DioramaCamera3D.gd" id="7_camera"]
 
 [sub_resource type="Environment" id="Environment_store"]
 background_mode = 1
@@ -264,7 +265,12 @@ shape = SubResource("Shape_interaction")
 
 [node name="Camera3D" type="Camera3D" parent="."]
 unique_name_in_owner = true
-position = Vector3(10.5, 11.5, 14)
+position = Vector3(0, 11.5, 14)
 projection = 1
 size = 17.0
 current = true
+script = ExtResource("7_camera")
+target_player_path = NodePath("../Player")
+camera_offset = Vector3(0, 11.5, 14)
+limit_left = -4.5
+limit_right = 4.5

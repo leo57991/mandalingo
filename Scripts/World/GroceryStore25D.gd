@@ -1,9 +1,6 @@
 extends Node3D
 
-@onready var camera: Camera3D = %Camera3D
-
 func _ready() -> void:
-	camera.look_at(Vector3(0.0, 0.7, 0.0), Vector3.UP)
 	_add_interface("res://Scenes/UI/NotebookUI.tscn")
 	_add_interface("res://Scenes/UI/TelemetryConsentUI.tscn")
 	_create_notebook_button()

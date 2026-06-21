@@ -26,6 +26,7 @@ const ALLOWED_EVENTS = new Set([
   'rune_judgement',
   'rune_spell_success',
   'tocfl_level_unlocked',
+  'shop_camera_initialized',
 ]);
 
 function doGet() {
