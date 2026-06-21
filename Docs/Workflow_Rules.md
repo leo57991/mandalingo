@@ -1,5 +1,13 @@
 # Workflow Rules
 
+## Version Target
+
+Read `Docs/VERSION_STRATEGY.md` before editing the project.
+
+- The 2.5D version is the default active development target.
+- Do not modify `Scenes/World/GroceryStore.tscn` or `Scripts/World/GroceryStore.gd` unless the user explicitly requests a 2D change.
+- Keep reusable systems scene-independent and place only 2.5D integration wiring in the 2.5D scene or scene script.
+
 ## GitHub Sync
 
 Every Godot project change made through Codex must be committed and pushed to GitHub.

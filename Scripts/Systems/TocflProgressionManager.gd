@@ -12,6 +12,9 @@ const LEVEL_UP_THRESHOLD := 0.6
 var current_level := "Prep1"
 var _mastered_spell_ids: Array[StringName] = []
 
+func _ready() -> void:
+	add_to_group("tocfl_progression_manager")
+
 func record_spell_success(spell_id: StringName) -> bool:
 	if spell_id.is_empty() or _mastered_spell_ids.has(spell_id):
 		return false
