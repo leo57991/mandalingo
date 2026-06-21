@@ -28,6 +28,17 @@ func _run() -> void:
 		not char_judge.evaluate(reversed_characters).success,
 		"Character order is exact"
 	)
+	var separated_characters: Array[StringName] = [&"水", &"來"]
+	var combined_character: Array[StringName] = [&"水來"]
+	var exact_key_judge := CharToWordJudge.new({
+		&"separated": separated_characters,
+		&"combined": combined_character,
+	})
+	_expect(
+		exact_key_judge.evaluate(separated_characters).result_id == &"separated"
+		and exact_key_judge.evaluate(combined_character).result_id == &"combined",
+		"Character lookup keys preserve sequence boundaries"
+	)
 
 	var patterns: Array[SpellPattern] = [pattern]
 	var correct_spell: Array[StringName] = [&"zhe", &"shi", &"pingguo"]

@@ -133,6 +133,29 @@ func track_tocfl_level_unlocked(
 		},
 	})
 
+func track_interactable_reaction(
+	object_id: StringName,
+	submitted: Array[StringName],
+	matched_reaction: InteractableReaction,
+	location: String = "",
+	context: Dictionary = {}
+) -> Dictionary:
+	var submitted_sequence := PackedStringArray()
+	for value: StringName in submitted:
+		submitted_sequence.append(String(value))
+	return record_player_event("interactable_reaction_triggered", {
+		"location": location,
+		"context": context,
+		"details": {
+			"object_id": String(object_id),
+			"submitted_sequence": "|".join(submitted_sequence),
+			"is_success": matched_reaction != null,
+			"matched_reaction_id": (
+				String(matched_reaction.reaction_id) if matched_reaction != null else ""
+			),
+		},
+	})
+
 func load_queue() -> void:
 	event_queue.clear()
 	if not FileAccess.file_exists(queue_file_path):

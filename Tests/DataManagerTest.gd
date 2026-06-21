@@ -32,11 +32,70 @@ func _run() -> void:
 	_expect(event.has("client_timestamp"), "DataManager adds a client timestamp")
 	_expect(FileAccess.file_exists(TEST_QUEUE_FILE), "New events persist to a local JSON queue")
 
-	var reloaded_manager: Node = _create_manager()
-	_expect(reloaded_manager.event_queue.size() == 1, "DataManager reloads the local queue")
-	var uploaded_ids: Array[String] = [String(event.event_id)]
+	var water_entry: VocabularyEntry = VocabularyEntry.new()
+	water_entry.id = &"test_water"
+	water_entry.english_internal = "water"
+	var vocab_db: Node = root.get_node("VocabularyDatabase")
+	vocab_db.entries[water_entry.id] = water_entry
+	var water_reaction: InteractableReaction = InteractableReaction.new()
+	water_reaction.reaction_id = &"water_reacts"
+	water_reaction.trigger_sequence = [&"test_water", &"lai"]
+	var reactions: Array[InteractableReaction] = [water_reaction, null]
+	var reaction_lookup: Dictionary = InteractableReactionMatcher.build_lookup(reactions)
+	var matched_reaction: InteractableReaction = InteractableReactionMatcher.match(
+		water_reaction.trigger_sequence, reaction_lookup
+	)
+	_expect(matched_reaction == water_reaction, "Reaction matcher finds an exact sequence")
+	var partial_sequence: Array[StringName] = [&"test_water"]
 	_expect(
-		reloaded_manager.clear_uploaded_events(uploaded_ids) == 1,
+		InteractableReactionMatcher.match(partial_sequence, reaction_lookup) == null,
+		"Reaction matcher rejects partial sequences"
+	)
+	_expect(
+		InteractableReactionMatcher.build_fallback_log(
+			partial_sequence, vocab_db, "The {element} remains still."
+		) == "The water remains still.",
+		"Fallback logs use internal English vocabulary metadata"
+	)
+	var missing_sequence: Array[StringName] = [&"missing"]
+	var empty_english_entry: VocabularyEntry = VocabularyEntry.new()
+	empty_english_entry.id = &"empty_english"
+	vocab_db.entries[empty_english_entry.id] = empty_english_entry
+	var empty_english_sequence: Array[StringName] = [empty_english_entry.id]
+	var empty_sequence: Array[StringName] = []
+	_expect(
+		InteractableReactionMatcher.build_fallback_log(
+			missing_sequence, vocab_db, "{element}"
+		) == "missing"
+		and InteractableReactionMatcher.build_fallback_log(
+			empty_english_sequence, vocab_db, "{element}"
+		) == "empty_english"
+		and InteractableReactionMatcher.build_fallback_log(
+			empty_sequence, vocab_db, "{element}"
+		) == "Unknown",
+		"Fallback logs safely handle missing data, empty English, and empty input"
+	)
+	var reaction_event: Dictionary = manager.track_interactable_reaction(
+		&"well", water_reaction.trigger_sequence, matched_reaction, "courtyard"
+	)
+	_expect(
+		reaction_event.event_name == "interactable_reaction_triggered"
+		and reaction_event.details.submitted_sequence == "test_water|lai"
+		and reaction_event.details.is_success
+		and reaction_event.details.matched_reaction_id == "water_reacts",
+		"DataManager records normalized interactable reaction details"
+	)
+	vocab_db.entries.erase(water_entry.id)
+	vocab_db.entries.erase(empty_english_entry.id)
+
+	var reloaded_manager: Node = _create_manager()
+	_expect(reloaded_manager.event_queue.size() == 2, "DataManager reloads the local queue")
+	var uploaded_ids: Array[String] = [
+		String(event.event_id),
+		String(reaction_event.event_id),
+	]
+	_expect(
+		reloaded_manager.clear_uploaded_events(uploaded_ids) == 2,
 		"Confirmed uploaded event ids can be removed"
 	)
 	_expect(reloaded_manager.event_queue.is_empty(), "Clearing uploaded ids preserves queue integrity")
