@@ -143,6 +143,10 @@ func track_interactable_reaction(
 	var submitted_sequence := PackedStringArray()
 	for value: StringName in submitted:
 		submitted_sequence.append(String(value))
+	var trigger_sequence := PackedStringArray()
+	if matched_reaction != null:
+		for value: StringName in matched_reaction.trigger_sequence:
+			trigger_sequence.append(String(value))
 	return record_player_event("interactable_reaction_triggered", {
 		"location": location,
 		"context": context,
@@ -150,6 +154,13 @@ func track_interactable_reaction(
 			"object_id": String(object_id),
 			"submitted_sequence": "|".join(submitted_sequence),
 			"is_success": matched_reaction != null,
+			"reaction_id": (
+				String(matched_reaction.reaction_id) if matched_reaction != null else ""
+			),
+			"trigger_sequence": "|".join(trigger_sequence),
+			"particle_effect_type": (
+				matched_reaction.particle_effect_type if matched_reaction != null else ""
+			),
 			"matched_reaction_id": (
 				String(matched_reaction.reaction_id) if matched_reaction != null else ""
 			),
