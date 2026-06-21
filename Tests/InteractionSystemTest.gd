@@ -17,21 +17,25 @@ func _run() -> void:
 	data_manager.event_queue.clear()
 	telemetry_manager.consent_state = telemetry_manager.CONSENT_DECLINED
 
-	var open_door_reaction := InteractableReaction.new()
-	open_door_reaction.reaction_id = &"open_door"
-	open_door_reaction.trigger_sequence = [&"開", &"門"]
-	open_door_reaction.particle_effect_type = "door_dust"
-	open_door_reaction.log_english_template = "The {element} does not react."
-	var reactions: Array[InteractableReaction] = [open_door_reaction]
+	# Fixture concept: a mysterious large cube that reacts to the correct incantation.
+	var mysterious_cube_reaction := InteractableReaction.new()
+	mysterious_cube_reaction.reaction_id = &"mysterious_cube_open"
+	mysterious_cube_reaction.trigger_sequence = [&"開", &"芝", &"麻"]
+	mysterious_cube_reaction.particle_effect_type = "cube_glow"
+	mysterious_cube_reaction.log_english_template = "The {element} does not react."
+	var reactions: Array[InteractableReaction] = [mysterious_cube_reaction]
 	var lookup: Dictionary = InteractableReactionMatcher.build_lookup(reactions)
 
-	var correct_sequence: Array[StringName] = [&"開", &"門"]
+	var correct_sequence: Array[StringName] = [&"開", &"芝", &"麻"]
 	var matched: InteractableReaction = InteractableReactionMatcher.match(
 		correct_sequence, lookup
 	)
-	_expect(matched == open_door_reaction, "An exact sequence returns its reaction")
+	_expect(
+		matched == mysterious_cube_reaction,
+		"The exact 開|芝|麻 sequence returns the mysterious cube reaction"
+	)
 
-	var reversed_sequence: Array[StringName] = [&"門", &"開"]
+	var reversed_sequence: Array[StringName] = [&"麻", &"芝", &"開"]
 	_expect(
 		InteractableReactionMatcher.match(reversed_sequence, lookup) == null,
 		"A reversed sequence does not trigger a reaction"
@@ -44,23 +48,35 @@ func _run() -> void:
 	)
 
 	var vocab_db: Node = root.get_node("VocabularyDatabase")
-	var unknown_sequence: Array[StringName] = [&"不存在的字"]
-	var fallback_log: String = InteractableReactionMatcher.build_fallback_log(
-		unknown_sequence, vocab_db, "The {element} does not react."
+	var random_guess: Array[StringName] = [&"火", &"去"]
+	var random_guess_match: InteractableReaction = InteractableReactionMatcher.match(
+		random_guess, lookup
+	)
+	var random_guess_log: String = InteractableReactionMatcher.build_fallback_log(
+		random_guess, vocab_db, "The {element} does not react."
 	)
 	_expect(
-		fallback_log == "The 不存在的字 does not react.",
-		"Unknown vocabulary safely falls back to its submitted id"
+		random_guess_match == null
+		and random_guess_log == "The 火 does not react.",
+		"The 火|去 random guess safely falls back without triggering"
 	)
 
-	var mixed_sequence: Array[StringName] = [&"開", &"不存在的字", &"門"]
+	var missing_translation_entry := VocabularyEntry.new()
+	missing_translation_entry.id = &"縹"
+	missing_translation_entry.english_internal = ""
+	vocab_db.entries[missing_translation_entry.id] = missing_translation_entry
+	var missing_translation_sequence: Array[StringName] = [&"縹", &"去"]
+	var missing_translation_log: String = InteractableReactionMatcher.build_fallback_log(
+		missing_translation_sequence, vocab_db, "The {element} does not react."
+	)
 	_expect(
-		InteractableReactionMatcher.match(mixed_sequence, lookup) == null,
-		"A mixed known and unknown sequence safely returns no match"
+		InteractableReactionMatcher.match(missing_translation_sequence, lookup) == null
+		and missing_translation_log == "The 縹 does not react.",
+		"Missing English for 縹|去 safely falls back to the original character"
 	)
 
 	var char_judge := CharToWordJudge.new({&"open_door": correct_sequence})
-	var unknown_char_result: RuneJudgeResult = char_judge.evaluate(unknown_sequence)
+	var unknown_char_result: RuneJudgeResult = char_judge.evaluate(random_guess)
 	var empty_char_result: RuneJudgeResult = char_judge.evaluate(empty_sequence)
 	_expect(
 		not unknown_char_result.success and unknown_char_result.result_id.is_empty()
@@ -69,7 +85,7 @@ func _run() -> void:
 	)
 
 	var event: Dictionary = data_manager.track_interactable_reaction(
-		&"shop_door",
+		&"test_cube",
 		correct_sequence,
 		matched,
 		"grocery_store_25d",
@@ -80,11 +96,14 @@ func _run() -> void:
 	_expect(
 		event.get("event_name", "") == "interactable_reaction_triggered"
 		and event.get("context", {}).get("scene_name", "") == "interaction_system_test"
-		and details.get("reaction_id", "") == "open_door"
-		and details.get("trigger_sequence", "") == "開|門"
-		and details.get("submitted_sequence", "") == "開|門"
-		and details.get("particle_effect_type", "") == "door_dust",
-		"DataManager preserves reaction identity, sequences, effects, and context"
+		and details.get("object_id", "") == "test_cube"
+		and details.get("reaction_id", "") == "mysterious_cube_open"
+		and details.get("trigger_sequence", "") == "開|芝|麻"
+		and details.get("submitted_sequence", "") == "開|芝|麻"
+		and details.get("is_success", false)
+		and not String(details.get("matched_reaction_id", "")).is_empty()
+		and details.get("particle_effect_type", "") == "cube_glow",
+		"DataManager records the complete successful test_cube event"
 	)
 
 	var invalid_events_before: int = data_manager.event_queue.size()
@@ -92,13 +111,13 @@ func _run() -> void:
 	for index: int in INVALID_ATTEMPT_COUNT:
 		var invalid_sequence: Array[StringName] = [
 			StringName("invalid_%d" % index),
-			&"門",
+			&"去",
 		]
 		var invalid_match: InteractableReaction = InteractableReactionMatcher.match(
 			invalid_sequence, lookup
 		)
 		var invalid_event: Dictionary = data_manager.track_interactable_reaction(
-			&"shop_door", invalid_sequence, invalid_match, "grocery_store_25d"
+			&"test_cube", invalid_sequence, invalid_match, "grocery_store_25d"
 		)
 		if invalid_match != null or invalid_event.is_empty():
 			invalid_attempts_stable = false
@@ -109,6 +128,7 @@ func _run() -> void:
 		"Repeated invalid attempts remain stable and are recorded"
 	)
 
+	vocab_db.entries.erase(missing_translation_entry.id)
 	data_manager.queue_file_path = original_queue_path
 	data_manager.event_queue.clear()
 	_delete_test_queue()

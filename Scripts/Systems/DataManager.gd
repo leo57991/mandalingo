@@ -133,6 +133,16 @@ func track_tocfl_level_unlocked(
 		},
 	})
 
+# The simplified design contract is object_id + submitted + is_success + matched_id.
+# Callers pass the matched reaction instead so DataManager remains the only place
+# that derives telemetry details: is_success, matched_reaction_id, reaction_id,
+# trigger_sequence, and particle_effect_type.
+# TODO(failed_attempts_brute_force): Detect many distinct invalid sequences submitted
+# for one object within a short time window.
+# TODO(highest_failure_chars): Aggregate characters that occur most often in failed
+# or invalid interaction attempts.
+# TODO(object_stall_duration): Measure time spent stalled or repeatedly failing at
+# the same interactable object.
 func track_interactable_reaction(
 	object_id: StringName,
 	submitted: Array[StringName],
