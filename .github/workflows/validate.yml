@@ -1,0 +1,40 @@
+name: "Validate Godot Project"
+
+on:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    name: "Godot 4.6.3 validation"
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    container:
+      image: barichello/godot-ci:4.6.3
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install runtime dependencies
+        run: apt-get update && apt-get install -y libfontconfig1
+
+      - name: Import project
+        run: godot --headless --path . --import
+
+      - name: Validate project startup and parsing
+        run: godot --headless --path . --quit-after 3
+
+      # Tests are standalone SceneTree scripts; the repository does not use a
+      # discovery-based test runner yet, so each script is invoked explicitly.
+      - name: Run RuneSystemTest
+        run: godot --headless --path . --script res://Tests/RuneSystemTest.gd
+
+      - name: Run DataManagerTest
+        run: godot --headless --path . --script res://Tests/DataManagerTest.gd
+
+      - name: Run InteractionSystemTest
+        run: godot --headless --path . --script res://Tests/InteractionSystemTest.gd
