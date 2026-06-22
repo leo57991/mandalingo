@@ -61,7 +61,7 @@ actually run and complete successfully.
 
 ## Godot Sidecar Audit
 
-PR #1 adds 22 `.uid` files. Each maps to an existing Godot script; no orphan
+PR #1 adds 23 `.uid` files. Each maps to an existing Godot script; no orphan
 UID sidecars were found:
 
 - `Scripts/Actors/NPCController3D.gd.uid`
@@ -83,6 +83,7 @@ UID sidecars were found:
 - `Scripts/UI/StatusMenuUI.gd.uid`
 - `Scripts/World/GroceryStore25D.gd.uid`
 - `Tests/DataManagerTest.gd.uid`
+- `Tests/InteractionSystemTest.gd.uid`
 - `Tests/Prototype25DSmokeTest.gd.uid`
 - `Tests/RuneSystemTest.gd.uid`
 - `Tests/StatusMenuTest.gd.uid`
