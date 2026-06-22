@@ -65,8 +65,8 @@ func _report_guess_update() -> void:
 	if vocab_entry == null or vocab_entry.user_guess == _last_reported_guess:
 		return
 	_last_reported_guess = vocab_entry.user_guess
-	TelemetryManager.track_guess_updated(
+	DataManager.track_guess_updated(
 		vocab_entry.id,
-		vocab_entry.user_guess.length(),
-		not vocab_entry.user_guess.strip_edges().is_empty()
+		vocab_entry.user_guess,
+		{"source": "notebook"}
 	)

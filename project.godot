@@ -15,13 +15,14 @@ compatibility/default_parent_skeleton_in_mesh_instance_3d=true
 [application]
 
 config/name="Chinese Immersion RPG - Prototype v0.1"
-config/description="2D grocery store prototype for immersion-based Mandarin vocabulary acquisition."
-run/main_scene="res://Scenes/World/GroceryStore.tscn"
+config/description="2.5D grocery store experiment for immersion-based Mandarin vocabulary acquisition."
+run/main_scene="res://Scenes/World/GroceryStore25D.tscn"
 config/features=PackedStringArray("4.6", "Forward Plus")
 config/icon="res://icon.svg"
 
 [autoload]
 
+DataManager="*res://Scripts/Systems/DataManager.gd"
 TelemetryManager="*res://Scripts/Systems/TelemetryManager.gd"
 VocabularyDatabase="*res://Scripts/Systems/VocabularyDatabase.gd"
 AudioManager="*res://Scripts/Systems/AudioManager.gd"
@@ -38,11 +39,21 @@ window/stretch/aspect="expand"
 
 theme/custom="res://Assets/ChineseImmersionTheme.tres"
 
+[rendering]
+
+anti_aliasing/quality/msaa_3d=0
+anti_aliasing/quality/screen_space_aa=0
+lights_and_shadows/directional_shadow/size=1024
+lights_and_shadows/directional_shadow/soft_shadow_filter_quality=0
+scaling_3d/scale=1.0
+textures/canvas_textures/default_texture_filter=0
+textures/default_filters/use_nearest_mipmap_filter=false
+
 [telemetry]
 
 enabled=true
 endpoint_url="https://script.google.com/macros/s/AKfycbxZKosTNYb22WNr1czhhEb_4am1RnzzGGsBDQj_Aw8sR9X7TAX28AjBKySM4snQJXON/exec"
-build_id="prototype-v0.1"
+build_id="prototype-2.5d-experiment"
 consent_version=1
 
 [input]

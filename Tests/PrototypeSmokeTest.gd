@@ -8,6 +8,7 @@ const EXPECTED_VOCABULARY_IDS: Array[StringName] = [
 	&"shui",
 	&"zhe",
 ]
+const TEST_EVENT_QUEUE := "user://prototype_smoke_player_events.json"
 
 var failures: Array[String] = []
 
@@ -17,6 +18,9 @@ func _initialize() -> void:
 func _run() -> void:
 	var telemetry_manager: Node = root.get_node("TelemetryManager")
 	telemetry_manager.consent_state = "declined"
+	var data_manager: Node = root.get_node("DataManager")
+	data_manager.queue_file_path = TEST_EVENT_QUEUE
+	data_manager.event_queue.clear()
 
 	var packed_scene: PackedScene = load("res://Scenes/World/GroceryStore.tscn")
 	_expect(packed_scene != null, "Main scene loads")
@@ -312,6 +316,8 @@ func _expect(condition: bool, description: String) -> void:
 		push_error("FAIL: %s" % description)
 
 func _finish() -> void:
+	if FileAccess.file_exists(TEST_EVENT_QUEUE):
+		DirAccess.remove_absolute(ProjectSettings.globalize_path(TEST_EVENT_QUEUE))
 	if failures.is_empty():
 		print("Prototype smoke test passed.")
 		quit(0)

@@ -27,7 +27,7 @@ func interact() -> void:
 	var telemetry_name := display_name
 	if target_kind == "npc" and "character_name" in speaker:
 		telemetry_name = speaker.character_name
-	TelemetryManager.track_interaction(telemetry_name, target_kind, vocab_ids)
+	DataManager.track_interaction(telemetry_name, target_kind, vocab_ids)
 	if speaker != null and speaker.has_method("say"):
 		speaker.say(lines, vocab_ids)
 		return

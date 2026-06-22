@@ -2,6 +2,14 @@
 
 The prototype sends consented anonymous gameplay events from the GitHub Pages build to a Google Apps Script Web App. The script writes each event to a Google Sheet stored in Google Drive.
 
+## Runtime Responsibilities
+
+- `DataManager` is the player-event entry point. It adds common fields and persists events to `user://player_event_queue.json`.
+- `TelemetryManager` owns consent, endpoint configuration, and remote delivery.
+- `VocabularyDatabase` owns vocabulary state and reports learning events through `DataManager`.
+
+The local queue may retain the player's notebook guess so future local recovery and playtest tooling can use it. The guess text is removed before an event is passed to `TelemetryManager`; only `guess_length` and `has_guess` are uploaded under the current consent wording. Queued events are never deleted merely because a delivery was attempted. Call `DataManager.clear_uploaded_events(event_ids)` only after an uploader has confirmed those event IDs succeeded.
+
 ## Data Collected
 
 - Random session ID generated for the current game session.

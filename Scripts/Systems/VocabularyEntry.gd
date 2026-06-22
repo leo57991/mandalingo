@@ -5,6 +5,7 @@ class_name VocabularyEntry
 @export var chinese: String
 @export var pinyin: String
 @export var english_internal: String
+@export_enum("Prep1", "Prep2", "A1", "A2", "B1", "B2", "C1", "C2") var tocfl_level: String = "Prep1"
 @export_file("*.wav", "*.ogg", "*.mp3") var audio_file: String
 @export var learned: bool = false
 
